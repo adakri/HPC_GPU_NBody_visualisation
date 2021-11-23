@@ -1,0 +1,72 @@
+
+PROJECT(N_Body_Simulation_CUDA)
+
+#The CMake Minimum version that is required. The FindCUDA script
+#is distributed since version 3.8
+CMAKE_MINIMUM_REQUIRED(VERSION 3.8)
+
+#Searching CUDA
+FIND_PACKAGE(CUDA)
+
+MESSAGE( STATUS "N_body ray-traced- project is being generated" )
+
+option(CUDA_DEVICE_DEBUGGING
+  "On to enable debugging device code."
+  OFF
+  )  
+
+if (CUDA_DEVICE_DEBUGGING)
+  set(DEVICE_DEBUGGING -G0)
+endif (CUDA_DEVICE_DEBUGGING)
+
+
+SET( NBODY_HEADERS
+  #.h
+)
+
+SET( NBODY_SRC
+  #.cu & .cpp
+)
+
+MESSAGE( "NBODY_SRC = " ${NBODY_SRC} )
+
+#########################################################
+# FIND GLUT
+#########################################################
+find_package(GLUT REQUIRED)
+cuda_include_directories(${GLUT_INCLUDE_DIRS})
+link_directories(${GLUT_LIBRARY_DIRS})
+add_definitions(${GLUT_DEFINITIONS})
+if(NOT GLUT_FOUND)
+    message(ERROR " GLUT not found!")
+endif(NOT GLUT_FOUND)
+#########################################################
+# FIND OPENGL
+#########################################################
+find_package(OpenGL REQUIRED)
+cuda_include_directories(${OpenGL_INCLUDE_DIRS})
+link_directories(${OpenGL_LIBRARY_DIRS})
+add_definitions(${OpenGL_DEFINITIONS})
+if(NOT OPENGL_FOUND)
+    message(ERROR " OPENGL not found!")
+endif(NOT OPENGL_FOUND)
+
+
+
+
+set(ALL_LIBRARIES ${FREEGLUT_LIBRARY} ${GLEW_LIBRARY})
+
+
+include_directories(${CUDA_SDK_ROOT_DIR}/common/inc)
+include_directories(${CUDA_SDK_ROOT_DIR}/../shared/inc)
+
+set(GENCODE -gencode=arch=compute_30,code=sm_30 -gencode=arch=compute_30,code=compute_30)
+set(GENCODE ${GENCODE} -gencode=arch=compute_20,code=sm_20 -gencode=arch=compute_20,code=compute_20)
+
+CUDA_ADD_EXECUTABLE( nbody ${NBODY_SRC} ${NBODY_HEADERS} 
+                     OPTIONS ${GENCODE} ${DEVICE_DEBUGGING})
+
+target_link_libraries(nbody ${ALL_LIBRARIES})
+
+
+       
