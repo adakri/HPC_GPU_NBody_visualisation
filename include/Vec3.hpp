@@ -14,8 +14,18 @@
 
 #define spec_t double
 
+#include "Constants.hpp"
 
-class Vec2 {
+
+// Vectors
+typedef double Vector;
+typedef Vector Force;
+typedef Vector Acceleration;
+typedef Vector Position;
+typedef Vector Velocity;
+
+
+class Vec3 {
 
     private:
       
@@ -24,18 +34,22 @@ class Vec2 {
       spec_t _y;
       spec_t _z;
       //Première fois que j'avais besoin d'implémenter un constructeur par défault et que je ne l'ai pas implementé
-      Vec2()=default;
-      Vec2(spec_t x, spec_t y, spec_t z);
-      ~Vec2(){};
+      Vec3()=default;
+      Vec3(spec_t x, spec_t y, spec_t z);
+      ~Vec3(){};
 
-      //implemented methods
+      //implemented methods/ maths and physics
       spec_t norm2() const;
+      void normalize();
+      void invert();
+      Force forceNewtonianGravit_y3D();
 
-      Vec2 operator+(const Vec2& v);
-      Vec2 operator-(const Vec2& v);
-      bool operator==(const Vec2& v) const;
-      Vec2& operator=(const Vec2& v);
-      friend std::ostream &operator <<(std::ostream &str, const Vec2 &v);
+
+      Vec3 operator+(const Vec3& v);
+      Vec3 operator-(const Vec3& v);
+      bool operator==(const Vec3& v) const;
+      Vec3& operator=(const Vec3& v);
+      friend std::ostream &operator <<(std::ostream &str, const Vec3 &v);
       void isString();
 
       // getter/setter
@@ -44,9 +58,19 @@ class Vec2 {
       spec_t getZ() const { return _z;};
       void setX(spec_t x) {this->_x = x;};
       void setY(spec_t y) {this->_y = y;};
-      void setY(spec_t z) {this->_z = z;};
+      void setZ(spec_t z) {this->_z = z;};
 };
 
+//3D
+typedef Vec3 Force3D;
+typedef Vec3 Acceleration3D;
+typedef Vec3 Velocit_y3D;
+typedef Vec3 Position3D;
+
+// Scalar
+typedef double Scalar;
+typedef Scalar Mass;
+typedef Scalar Time;
 
 
 

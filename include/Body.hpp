@@ -1,7 +1,7 @@
 #ifndef BODY_H
 #define BODY_H
 
-#include "constants.h"
+#include "Constants.hpp"
 #include "Vec3.hpp"
 
 
@@ -11,8 +11,7 @@
 
 /*
   Class for a body in the simulation (position, velocity, mass,
-  and radius). Also eventually the functions for drawing the body in the
-  simulation, as well as updating the body.
+  and radius). Also eventually the functions for drawing the body in the simulation, as well as updating the body.
 */
 class Body {
  public:
@@ -32,10 +31,10 @@ class Body {
   void Draw() const;
 
   /*
-    Update the position of the body by modeling the body movement with the
-    given time step.
+    Update the position of the body by modeling the body movement with the given time step.
    */
   void UpdatePosition(double time_step);
+
 };
 
 #endif /* body_h */
