@@ -150,6 +150,33 @@ src/Body.cpp.s:
 	$(MAKE) -f CMakeFiles/nbody.dir/build.make CMakeFiles/nbody.dir/src/Body.cpp.s
 .PHONY : src/Body.cpp.s
 
+src/NBody.o: src/NBody.cpp.o
+
+.PHONY : src/NBody.o
+
+# target to build an object file
+src/NBody.cpp.o:
+	$(MAKE) -f CMakeFiles/nbody.dir/build.make CMakeFiles/nbody.dir/src/NBody.cpp.o
+.PHONY : src/NBody.cpp.o
+
+src/NBody.i: src/NBody.cpp.i
+
+.PHONY : src/NBody.i
+
+# target to preprocess a source file
+src/NBody.cpp.i:
+	$(MAKE) -f CMakeFiles/nbody.dir/build.make CMakeFiles/nbody.dir/src/NBody.cpp.i
+.PHONY : src/NBody.cpp.i
+
+src/NBody.s: src/NBody.cpp.s
+
+.PHONY : src/NBody.s
+
+# target to generate assembly for a file
+src/NBody.cpp.s:
+	$(MAKE) -f CMakeFiles/nbody.dir/build.make CMakeFiles/nbody.dir/src/NBody.cpp.s
+.PHONY : src/NBody.cpp.s
+
 src/Physics.o: src/Physics.cpp.o
 
 .PHONY : src/Physics.o
@@ -231,6 +258,33 @@ src/main.cpp.s:
 	$(MAKE) -f CMakeFiles/nbody.dir/build.make CMakeFiles/nbody.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/random_init.o: src/random_init.cpp.o
+
+.PHONY : src/random_init.o
+
+# target to build an object file
+src/random_init.cpp.o:
+	$(MAKE) -f CMakeFiles/nbody.dir/build.make CMakeFiles/nbody.dir/src/random_init.cpp.o
+.PHONY : src/random_init.cpp.o
+
+src/random_init.i: src/random_init.cpp.i
+
+.PHONY : src/random_init.i
+
+# target to preprocess a source file
+src/random_init.cpp.i:
+	$(MAKE) -f CMakeFiles/nbody.dir/build.make CMakeFiles/nbody.dir/src/random_init.cpp.i
+.PHONY : src/random_init.cpp.i
+
+src/random_init.s: src/random_init.cpp.s
+
+.PHONY : src/random_init.s
+
+# target to generate assembly for a file
+src/random_init.cpp.s:
+	$(MAKE) -f CMakeFiles/nbody.dir/build.make CMakeFiles/nbody.dir/src/random_init.cpp.s
+.PHONY : src/random_init.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -243,6 +297,9 @@ help:
 	@echo "... src/Body.o"
 	@echo "... src/Body.i"
 	@echo "... src/Body.s"
+	@echo "... src/NBody.o"
+	@echo "... src/NBody.i"
+	@echo "... src/NBody.s"
 	@echo "... src/Physics.o"
 	@echo "... src/Physics.i"
 	@echo "... src/Physics.s"
@@ -252,6 +309,9 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/random_init.o"
+	@echo "... src/random_init.i"
+	@echo "... src/random_init.s"
 .PHONY : help
 
 

@@ -1,1 +1,1 @@
-/usr/bin/c++  -g   CMakeFiles/nbody.dir/src/Body.cpp.o CMakeFiles/nbody.dir/src/Vec3.cpp.o CMakeFiles/nbody.dir/src/Physics.cpp.o CMakeFiles/nbody.dir/src/main.cpp.o  -o nbody  /usr/lib/x86_64-linux-gnu/libGL.so /usr/lib/x86_64-linux-gnu/libGLU.so 
+/usr/bin/c++  -g   CMakeFiles/nbody.dir/src/Body.cpp.o CMakeFiles/nbody.dir/src/Vec3.cpp.o CMakeFiles/nbody.dir/src/Physics.cpp.o CMakeFiles/nbody.dir/src/random_init.cpp.o CMakeFiles/nbody.dir/src/NBody.cpp.o CMakeFiles/nbody.dir/src/main.cpp.o  -o nbody  /usr/lib/x86_64-linux-gnu/libGL.so /usr/lib/x86_64-linux-gnu/libGLU.so 

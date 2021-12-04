@@ -47,9 +47,11 @@ class Vec3 {
 
       Vec3 operator+(const Vec3& v);
       Vec3 operator-(const Vec3& v);
+      Vec3 operator*(double s) const;
       bool operator==(const Vec3& v) const;
       Vec3& operator=(const Vec3& v);
       friend std::ostream &operator <<(std::ostream &str, const Vec3 &v);
+      friend std::istream& operator>>(std::istream&, Vec3&);
       void isString();
 
       // getter/setter
@@ -64,7 +66,7 @@ class Vec3 {
 //3D
 typedef Vec3 Force3D;
 typedef Vec3 Acceleration3D;
-typedef Vec3 Velocit_y3D;
+typedef Vec3 Velocity3D;
 typedef Vec3 Position3D;
 
 // Scalar

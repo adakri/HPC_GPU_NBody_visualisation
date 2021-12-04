@@ -6,6 +6,13 @@ CMakeFiles/nbody.dir/src/Body.cpp.o: ../include/Constants.hpp
 CMakeFiles/nbody.dir/src/Body.cpp.o: ../include/Vec3.hpp
 CMakeFiles/nbody.dir/src/Body.cpp.o: ../src/Body.cpp
 
+CMakeFiles/nbody.dir/src/NBody.cpp.o: ../include/Body.hpp
+CMakeFiles/nbody.dir/src/NBody.cpp.o: ../include/Constants.hpp
+CMakeFiles/nbody.dir/src/NBody.cpp.o: ../include/NBody.hpp
+CMakeFiles/nbody.dir/src/NBody.cpp.o: ../include/Vec3.hpp
+CMakeFiles/nbody.dir/src/NBody.cpp.o: ../include/random_init.hpp
+CMakeFiles/nbody.dir/src/NBody.cpp.o: ../src/NBody.cpp
+
 CMakeFiles/nbody.dir/src/Physics.cpp.o: ../include/Body.hpp
 CMakeFiles/nbody.dir/src/Physics.cpp.o: ../include/Constants.hpp
 CMakeFiles/nbody.dir/src/Physics.cpp.o: ../include/Physics.hpp
@@ -16,7 +23,15 @@ CMakeFiles/nbody.dir/src/Vec3.cpp.o: ../include/Constants.hpp
 CMakeFiles/nbody.dir/src/Vec3.cpp.o: ../include/Vec3.hpp
 CMakeFiles/nbody.dir/src/Vec3.cpp.o: ../src/Vec3.cpp
 
+CMakeFiles/nbody.dir/src/main.cpp.o: ../include/Body.hpp
 CMakeFiles/nbody.dir/src/main.cpp.o: ../include/Constants.hpp
+CMakeFiles/nbody.dir/src/main.cpp.o: ../include/NBody.hpp
 CMakeFiles/nbody.dir/src/main.cpp.o: ../include/Vec3.hpp
+CMakeFiles/nbody.dir/src/main.cpp.o: ../include/random_init.hpp
 CMakeFiles/nbody.dir/src/main.cpp.o: ../src/main.cpp
+
+CMakeFiles/nbody.dir/src/random_init.cpp.o: ../include/Constants.hpp
+CMakeFiles/nbody.dir/src/random_init.cpp.o: ../include/Vec3.hpp
+CMakeFiles/nbody.dir/src/random_init.cpp.o: ../include/random_init.hpp
+CMakeFiles/nbody.dir/src/random_init.cpp.o: ../src/random_init.cpp
 

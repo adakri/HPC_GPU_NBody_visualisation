@@ -44,6 +44,15 @@ std::ostream & operator <<(std::ostream &str, const Vec3 &v)
     return str << "Vector 3D _x: " << v._x << " _y: " << v._y;
 }
 
+Vec3 Vec3::operator*(double s) const 
+{
+    return Vec3(_x*s, _y*s, _z*s);
+}
+
+std::istream& operator>>(std::istream& in, Vec3& v) {
+    return in >> v._x >> v._y >> v._z;
+}
+
 void Vec3::normalize() 
 {
   Scalar length = this->norm2();
@@ -122,16 +131,16 @@ inline Acceleration3D computeAccel3D(Mass mass, const Force3D &force)
   return anAccelVector;
 }
 
-inline Velocit_y3D computeVelo3D(Acceleration3D &accel, Velocit_y3D &prevVelo, Time deltaT) 
+inline Velocity3D computeVelo3D(Acceleration3D &accel, Velocity3D &prevVelo, Time deltaT) 
 {
-  Velocit_y3D aVelocit_yVector = {0, 0, 0};
+  Velocity3D aVelocit_yVector = {0, 0, 0};
   aVelocit_yVector._x = computeVelo( accel._x, prevVelo._x, deltaT );
   aVelocit_yVector._y = computeVelo( accel._y, prevVelo._y, deltaT );
   aVelocit_yVector._z = computeVelo( accel._z, prevVelo._z, deltaT );
   return aVelocit_yVector;
 }
 
-inline Position3D computePos3D(Velocit_y3D &velo, Position3D &prevPos, Time deltaT) 
+inline Position3D computePos3D(Velocity3D &velo, Position3D &prevPos, Time deltaT) 
 {
   Position3D anPositionVector = {0, 0, 0};
   anPositionVector._x = computePos(velo._x, prevPos._x, deltaT);

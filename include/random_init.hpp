@@ -1,17 +1,18 @@
 #include <glm/glm.hpp>
 #include <vector>
 
+#include "Vec3.hpp"
+
 /**
  * Generates a random particle position
- * @return 3D position + w component at 1.f
+ * @return 3D position 
  */
-glm::vec4 randomParticlePos();
+Vec3 randomParticlePos();
 
 /**
  * Generates a random particle velocity
  * @param pos the same particle's position
- * @return 3D velocity + w component at 0.f
+ * @return 3D velocity 
  */
-glm::vec4 randomParticleVel(glm::vec4 pos);
+Vec3 randomParticleVel();
 
-std::vector<float> genFlareTex(int size);

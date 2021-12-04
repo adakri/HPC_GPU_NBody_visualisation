@@ -5,7 +5,7 @@
 
 
 
-#include "Vec3.hpp"
+#include "NBody.hpp"
 
 
 
@@ -14,4 +14,5 @@
 
 int main(int, char**)
 {
+
 }

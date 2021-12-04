@@ -23,7 +23,7 @@ include_directories(include)
 
 SET( NBODY_SRC
   #.cu & .cpp
-  src/Body.cpp src/Vec3.cpp src/Physics.cpp src/main.cpp
+  src/Body.cpp src/Vec3.cpp src/Physics.cpp src/random_init.cpp src/NBody.cpp src/main.cpp
 )
 
 

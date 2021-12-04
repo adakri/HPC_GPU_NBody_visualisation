@@ -14,26 +14,35 @@
   and radius). Also eventually the functions for drawing the body in the simulation, as well as updating the body.
 */
 class Body {
- public:
-  Vec3 position_;
-  Vec3 velocity_;
-  double mass_;
-  double radius_;
+  public:
+    Vec3 _position;
+    Vec3 _velocity;
+    Vec3 _acceleration;
+    double _mass;
+    double _radius;
 
-  Body(Vec3 p, Vec3 v, double m, double r) {
-    position_ = p;
-    velocity_ = v;
-    mass_ = m;
-    radius_ = r;
-  }
+    Body(Vec3 p, Vec3 v, Vec3 a, double m, double r) {
+      _position = p;
+      _velocity = v;
+      _acceleration = a;
+      _mass = m;
+      _radius = r;
+    }
 
-  /* Will draw the body in the OpenFrameworks application. */
-  void Draw() const;
+    /* Will draw the body in the OpenFrameworks application. */
+    void Draw() const;
+    /*
+      Update the position of the body by modeling the body movement with the given time step.
+    */
+    void UpdatePosition(double time_step);
+    void isString();
 
-  /*
-    Update the position of the body by modeling the body movement with the given time step.
-   */
-  void UpdatePosition(double time_step);
+    //getters and setters
+    Vec3 get_position() const { return _position;};
+    Vec3 get_velocity() const { return _velocity;};
+    Vec3 get_acceleration() const { return _acceleration;};
+    double get_mass() const { return _mass;};
+    double get_radius() const { return _radius;};
 
 };
 
