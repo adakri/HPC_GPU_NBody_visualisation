@@ -13,14 +13,16 @@ Vec3 randomParticlePos()
     srand (time(NULL));
 
 	// Random position on a 'thick disk'
-	Vec3 particle;
-	float t = rand()*2*PI / RAND_MAX;
-	float s = rand()*100 / RAND_MAX;
-	particle._x = cos(t)*s;
-	particle._y = sin(t)*s;
-	particle._z = rand()*4 / RAND_MAX;
+	Vec3 pos;
+	float t = (rand() / float(RAND_MAX)) *2*PI;
+	debug(t)
+	float s = rand()*100. / float(RAND_MAX);
+	debug(s)
+	pos._x = cos(t)*s;
+	pos._y = sin(t)*s;
+	pos._z = (rand()*4.) / float(RAND_MAX);
 
-	return particle;
+	return pos;
 }
 
 Vec3 randomParticleVel()

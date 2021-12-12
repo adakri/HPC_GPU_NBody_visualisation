@@ -38,3 +38,66 @@ Body Collision(Body a, Body b) {
 bool SamePosition(Body a, Body b) {
   return a._radius + b._radius > Distance(a, b);
 }
+
+
+
+// Kinematics
+
+Velocity computeVelo( Acceleration current,
+                             Velocity previous,
+                             Time deltaT ) 
+{
+   return previous + ( current * deltaT );
+}
+
+Position computePos( Velocity current,
+                            Position previous,
+                            Time deltaT ) 
+{
+   return previous + ( current * deltaT );
+}
+
+Acceleration computeAccel( Mass mass, Force force ) 
+{
+   if( force == 0 ) {
+      return 0;
+   }
+
+   Scalar result = force / mass;
+   return result;
+}
+
+
+
+
+inline Acceleration3D computeAccel3D( Mass mass, const Force3D &force ) 
+{
+   Acceleration3D anAccelVector = {0, 0, 0};
+   anAccelVector._x = computeAccel( mass, force._x );
+   anAccelVector._y = computeAccel( mass, force._y );
+   anAccelVector._z = computeAccel( mass, force._z );
+   return anAccelVector;
+}
+
+
+
+
+Velocity3D computeVelo3D( Acceleration3D &accel,
+                                 Velocity3D &prevVelo,
+                                 Time deltaT ) {
+   Velocity3D aVelocityVector = {0, 0, 0};
+   aVelocityVector._x = computeVelo( accel._x, prevVelo._x, deltaT );
+   aVelocityVector._y = computeVelo( accel._y, prevVelo._y, deltaT );
+   aVelocityVector._z = computeVelo( accel._z, prevVelo._z, deltaT );
+   return aVelocityVector;
+}
+
+Position3D computePos3D( Velocity3D &velo,
+                                Position3D &prevPos,
+                                Time deltaT ) {
+   Position3D anPositionVector = {0, 0, 0};
+   anPositionVector._x = computePos( velo._x, prevPos._x, deltaT );
+   anPositionVector._y = computePos( velo._y, prevPos._y,  deltaT );
+   anPositionVector._z = computePos( velo._z, prevPos._z,  deltaT );
+   return anPositionVector;
+}

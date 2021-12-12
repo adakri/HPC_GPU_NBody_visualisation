@@ -44,6 +44,12 @@ class Body {
     double get_mass() const { return _mass;};
     double get_radius() const { return _radius;};
 
+    void set_position(Vec3 p) {  _position = p;};
+    void set_velocity(Vec3 v) {  _velocity = v;};
+    void set_acceleration(Vec3 a) {  _acceleration = a;};
+
+    
+
 };
 
 #endif /* body_h */

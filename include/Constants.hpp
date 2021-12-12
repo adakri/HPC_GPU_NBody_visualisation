@@ -2,6 +2,11 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <iostream>
+
+
+#define debug(a) std::cout<<"*** DEBUG: "<<#a<<" "<<a<<std::endl;
+
 /* Universal Gravitational Constant */
 const double G = 6.67E-11;
 

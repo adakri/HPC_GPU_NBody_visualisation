@@ -53,7 +53,17 @@ Body Collision(Body a, Body b);
 bool SamePosition(Body a, Body b);
 
 
+//Kinematics
+Velocity computeVelo( Acceleration , Velocity, Time);
 
+Position computePos( Velocity, Position, Time );
 
+Acceleration computeAccel( Mass , Force);
+
+Acceleration3D computeAccel3D( Mass , const Force3D& );
+
+Velocity3D computeVelo3D( Acceleration3D&, Velocity3D&, Time ); 
+
+Position3D computePos3D(Velocity3D&, Position3D&, Time);                            
 
 #endif /* body_utility_hpp */

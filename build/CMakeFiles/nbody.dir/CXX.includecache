@@ -17,12 +17,22 @@ stdio.h
 -
 
 ../include/Constants.hpp
+iostream
+-
 
 ../include/NBody.hpp
-Body.hpp
-../include/Body.hpp
+Physics.hpp
+../include/Physics.hpp
 random_init.hpp
 ../include/random_init.hpp
+
+../include/Physics.hpp
+Body.hpp
+../include/Body.hpp
+math.h
+-
+stdio.h
+-
 
 ../include/Vec3.hpp
 string
@@ -46,6 +56,20 @@ ctime
 Constants.hpp
 ../include/Constants.hpp
 
+../include/Viewer.hpp
+GL/glut.h
+-
+GL/gl.h
+-
+GL/glu.h
+-
+unistd.h
+-
+GLFW/glfw3.h
+-
+NBody.hpp
+../include/NBody.hpp
+
 ../include/random_init.hpp
 glm/glm.hpp
 -
@@ -54,21 +78,11 @@ vector
 Vec3.hpp
 ../include/Vec3.hpp
 
-/home/abdel_dakri/work/Projet_GPGPU/src/NBody.cpp
-NBody.hpp
-/home/abdel_dakri/work/Projet_GPGPU/src/NBody.hpp
-
 /home/abdel_dakri/work/Projet_GPGPU/src/main.cpp
 iostream
 -
 cstdlib
 -
-NBody.hpp
-/home/abdel_dakri/work/Projet_GPGPU/src/NBody.hpp
-
-/home/abdel_dakri/work/Projet_GPGPU/src/random_init.cpp
-random_init.hpp
-/home/abdel_dakri/work/Projet_GPGPU/src/random_init.hpp
-random
--
+Viewer.hpp
+/home/abdel_dakri/work/Projet_GPGPU/src/Viewer.hpp
 

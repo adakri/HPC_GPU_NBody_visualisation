@@ -42,7 +42,7 @@ class Vec3 {
       spec_t norm2() const;
       void normalize();
       void invert();
-      Force forceNewtonianGravit_y3D();
+      Force forceNewtonianGravity3D();
 
 
       Vec3 operator+(const Vec3& v);

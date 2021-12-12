@@ -231,6 +231,33 @@ src/Vec3.cpp.s:
 	$(MAKE) -f CMakeFiles/nbody.dir/build.make CMakeFiles/nbody.dir/src/Vec3.cpp.s
 .PHONY : src/Vec3.cpp.s
 
+src/Viewer.o: src/Viewer.cpp.o
+
+.PHONY : src/Viewer.o
+
+# target to build an object file
+src/Viewer.cpp.o:
+	$(MAKE) -f CMakeFiles/nbody.dir/build.make CMakeFiles/nbody.dir/src/Viewer.cpp.o
+.PHONY : src/Viewer.cpp.o
+
+src/Viewer.i: src/Viewer.cpp.i
+
+.PHONY : src/Viewer.i
+
+# target to preprocess a source file
+src/Viewer.cpp.i:
+	$(MAKE) -f CMakeFiles/nbody.dir/build.make CMakeFiles/nbody.dir/src/Viewer.cpp.i
+.PHONY : src/Viewer.cpp.i
+
+src/Viewer.s: src/Viewer.cpp.s
+
+.PHONY : src/Viewer.s
+
+# target to generate assembly for a file
+src/Viewer.cpp.s:
+	$(MAKE) -f CMakeFiles/nbody.dir/build.make CMakeFiles/nbody.dir/src/Viewer.cpp.s
+.PHONY : src/Viewer.cpp.s
+
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
@@ -306,6 +333,9 @@ help:
 	@echo "... src/Vec3.o"
 	@echo "... src/Vec3.i"
 	@echo "... src/Vec3.s"
+	@echo "... src/Viewer.o"
+	@echo "... src/Viewer.i"
+	@echo "... src/Viewer.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

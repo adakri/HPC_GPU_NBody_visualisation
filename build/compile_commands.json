@@ -1,32 +1,37 @@
 [
 {
   "directory": "/home/abdel_dakri/work/Projet_GPGPU/build",
-  "command": "/usr/bin/c++   -I/home/abdel_dakri/work/Projet_GPGPU/include -I/usr/lib/cmake/glm  -g   -o CMakeFiles/nbody.dir/src/Body.cpp.o -c /home/abdel_dakri/work/Projet_GPGPU/src/Body.cpp",
+  "command": "/usr/bin/c++   -I/home/abdel_dakri/work/Projet_GPGPU/include -I/usr/lib/cmake/glm   -Wall -Wextra -g   -o CMakeFiles/nbody.dir/src/Body.cpp.o -c /home/abdel_dakri/work/Projet_GPGPU/src/Body.cpp",
   "file": "/home/abdel_dakri/work/Projet_GPGPU/src/Body.cpp"
 },
 {
   "directory": "/home/abdel_dakri/work/Projet_GPGPU/build",
-  "command": "/usr/bin/c++   -I/home/abdel_dakri/work/Projet_GPGPU/include -I/usr/lib/cmake/glm  -g   -o CMakeFiles/nbody.dir/src/Vec3.cpp.o -c /home/abdel_dakri/work/Projet_GPGPU/src/Vec3.cpp",
+  "command": "/usr/bin/c++   -I/home/abdel_dakri/work/Projet_GPGPU/include -I/usr/lib/cmake/glm   -Wall -Wextra -g   -o CMakeFiles/nbody.dir/src/Vec3.cpp.o -c /home/abdel_dakri/work/Projet_GPGPU/src/Vec3.cpp",
   "file": "/home/abdel_dakri/work/Projet_GPGPU/src/Vec3.cpp"
 },
 {
   "directory": "/home/abdel_dakri/work/Projet_GPGPU/build",
-  "command": "/usr/bin/c++   -I/home/abdel_dakri/work/Projet_GPGPU/include -I/usr/lib/cmake/glm  -g   -o CMakeFiles/nbody.dir/src/Physics.cpp.o -c /home/abdel_dakri/work/Projet_GPGPU/src/Physics.cpp",
+  "command": "/usr/bin/c++   -I/home/abdel_dakri/work/Projet_GPGPU/include -I/usr/lib/cmake/glm   -Wall -Wextra -g   -o CMakeFiles/nbody.dir/src/Physics.cpp.o -c /home/abdel_dakri/work/Projet_GPGPU/src/Physics.cpp",
   "file": "/home/abdel_dakri/work/Projet_GPGPU/src/Physics.cpp"
 },
 {
   "directory": "/home/abdel_dakri/work/Projet_GPGPU/build",
-  "command": "/usr/bin/c++   -I/home/abdel_dakri/work/Projet_GPGPU/include -I/usr/lib/cmake/glm  -g   -o CMakeFiles/nbody.dir/src/random_init.cpp.o -c /home/abdel_dakri/work/Projet_GPGPU/src/random_init.cpp",
+  "command": "/usr/bin/c++   -I/home/abdel_dakri/work/Projet_GPGPU/include -I/usr/lib/cmake/glm   -Wall -Wextra -g   -o CMakeFiles/nbody.dir/src/random_init.cpp.o -c /home/abdel_dakri/work/Projet_GPGPU/src/random_init.cpp",
   "file": "/home/abdel_dakri/work/Projet_GPGPU/src/random_init.cpp"
 },
 {
   "directory": "/home/abdel_dakri/work/Projet_GPGPU/build",
-  "command": "/usr/bin/c++   -I/home/abdel_dakri/work/Projet_GPGPU/include -I/usr/lib/cmake/glm  -g   -o CMakeFiles/nbody.dir/src/NBody.cpp.o -c /home/abdel_dakri/work/Projet_GPGPU/src/NBody.cpp",
+  "command": "/usr/bin/c++   -I/home/abdel_dakri/work/Projet_GPGPU/include -I/usr/lib/cmake/glm   -Wall -Wextra -g   -o CMakeFiles/nbody.dir/src/NBody.cpp.o -c /home/abdel_dakri/work/Projet_GPGPU/src/NBody.cpp",
   "file": "/home/abdel_dakri/work/Projet_GPGPU/src/NBody.cpp"
 },
 {
   "directory": "/home/abdel_dakri/work/Projet_GPGPU/build",
-  "command": "/usr/bin/c++   -I/home/abdel_dakri/work/Projet_GPGPU/include -I/usr/lib/cmake/glm  -g   -o CMakeFiles/nbody.dir/src/main.cpp.o -c /home/abdel_dakri/work/Projet_GPGPU/src/main.cpp",
+  "command": "/usr/bin/c++   -I/home/abdel_dakri/work/Projet_GPGPU/include -I/usr/lib/cmake/glm   -Wall -Wextra -g   -o CMakeFiles/nbody.dir/src/Viewer.cpp.o -c /home/abdel_dakri/work/Projet_GPGPU/src/Viewer.cpp",
+  "file": "/home/abdel_dakri/work/Projet_GPGPU/src/Viewer.cpp"
+},
+{
+  "directory": "/home/abdel_dakri/work/Projet_GPGPU/build",
+  "command": "/usr/bin/c++   -I/home/abdel_dakri/work/Projet_GPGPU/include -I/usr/lib/cmake/glm   -Wall -Wextra -g   -o CMakeFiles/nbody.dir/src/main.cpp.o -c /home/abdel_dakri/work/Projet_GPGPU/src/main.cpp",
   "file": "/home/abdel_dakri/work/Projet_GPGPU/src/main.cpp"
 }
 ]

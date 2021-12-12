@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/abdel_dakri/work/Projet_GPGPU/src/NBody.cpp" "/home/abdel_dakri/work/Projet_GPGPU/build/CMakeFiles/nbody.dir/src/NBody.cpp.o"
   "/home/abdel_dakri/work/Projet_GPGPU/src/Physics.cpp" "/home/abdel_dakri/work/Projet_GPGPU/build/CMakeFiles/nbody.dir/src/Physics.cpp.o"
   "/home/abdel_dakri/work/Projet_GPGPU/src/Vec3.cpp" "/home/abdel_dakri/work/Projet_GPGPU/build/CMakeFiles/nbody.dir/src/Vec3.cpp.o"
+  "/home/abdel_dakri/work/Projet_GPGPU/src/Viewer.cpp" "/home/abdel_dakri/work/Projet_GPGPU/build/CMakeFiles/nbody.dir/src/Viewer.cpp.o"
   "/home/abdel_dakri/work/Projet_GPGPU/src/main.cpp" "/home/abdel_dakri/work/Projet_GPGPU/build/CMakeFiles/nbody.dir/src/main.cpp.o"
   "/home/abdel_dakri/work/Projet_GPGPU/src/random_init.cpp" "/home/abdel_dakri/work/Projet_GPGPU/build/CMakeFiles/nbody.dir/src/random_init.cpp.o"
   )
