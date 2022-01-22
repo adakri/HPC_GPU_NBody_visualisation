@@ -7,13 +7,13 @@
 
 
 // Project libs
-#include <GLTools.h>
-#include <GLFrustum.h>
-#include <GLMatrixStack.h>
-#include <GLGeometryTransform.h>
-#include <GLShaderManager.h>
-#include <StopWatch.h>
-#include <math3d.h>
+#include "GLTools.h"
+#include "GLFrustum.h"
+#include "GLMatrixStack.h"
+#include "GLGeometryTransform.h"
+#include "GLShaderManager.h"
+#include "StopWatch.h"
+#include "math3d.h"
 
 
 
@@ -30,9 +30,9 @@ using std::endl;
 
 
 
-const int APP_WIDTH = 1080;
-const int APP_HEIGHT = 960;
-const int NBODY_COUNT = 500;
+const int APP_WIDTH = 640;
+const int APP_HEIGHT = 320;
+const int NBODY_COUNT = 5;
 const char* APP_NAME = "Test Freeglut";
 
 
@@ -48,7 +48,7 @@ static GLfloat sBodyRadius[NBODY_COUNT];
 
 
 // Variables
-// - Matrices and shaders
+// Matrices and shaders
 static GLShaderManager sShaderManager;
 static GLFrustum sViewFrustrum;
 static GLMatrixStack sProjectionMatrixStack;
@@ -69,6 +69,7 @@ void setupWindow( int argc, char **argv ) {
    gltSetWorkingDirectory( argv[0] );
    glutInit( &argc, argv );
    glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
+   glutInitWindowPosition(0, 0);
    glutInitWindowSize( APP_WIDTH, APP_HEIGHT );
    glutCreateWindow( APP_NAME );
    glutFullScreen();
@@ -187,12 +188,6 @@ void setupRenderContext() {
                  sBackgroundColor[3] );
    glEnable( GL_LINE_SMOOTH );
 }
-
-
-
-
-
-
 
 
 

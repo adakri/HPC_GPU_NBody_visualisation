@@ -15,6 +15,7 @@ include_directories(include)
 SET( NBODY_SRC
   #.cu & .cpp
   src/Body.cpp src/Vec3.cpp src/random_init.cpp src/NBody.cpp src/Viewer.cpp src/main.cpp
+  OpenGL_libs/src/GLBatch.cpp OpenGL_libs/src/glew.c OpenGL_libs/src/GLShaderManager.cpp OpenGL_libs/src/GLTools.cpp OpenGL_libs/src/GLTriangleBatch.cpp OpenGL_libs/src/math3d.cpp
 )
 
 add_executable(nbody ${NBODY_SRC})
