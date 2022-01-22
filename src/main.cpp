@@ -30,9 +30,9 @@ using std::endl;
 
 
 
-const int APP_WIDTH = 640;
-const int APP_HEIGHT = 320;
-const int NBODY_COUNT = 5;
+const int APP_WIDTH = 1080;
+const int APP_HEIGHT = 720;
+const int NBODY_COUNT = 50;
 const char* APP_NAME = "Test Freeglut";
 
 
@@ -65,14 +65,15 @@ const bool DEBUG = false;
 
 // add window and initialize using glut (not glfw or stuff), glew apparently can be used to bind stuff
 
-void setupWindow( int argc, char **argv ) {
+void setupWindow( int argc, char **argv ) 
+{
    gltSetWorkingDirectory( argv[0] );
    glutInit( &argc, argv );
    glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
-   glutInitWindowPosition(0, 0);
+   glutInitWindowPosition(500, 150);
    glutInitWindowSize( APP_WIDTH, APP_HEIGHT );
    glutCreateWindow( APP_NAME );
-   glutFullScreen();
+   //glutFullScreen();
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -130,6 +131,9 @@ void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition ) {
       // Restore
       sModelViewMatrixStack.PopMatrix();
    }
+   std::cout<<"====================================================================="<<std::endl;
+   std::cout<<"The simulation at time "<<currentTime<<std::endl;
+   simul->display_bodies();
 }
 
 void onRenderScene( void ) {

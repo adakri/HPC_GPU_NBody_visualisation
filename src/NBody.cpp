@@ -93,7 +93,7 @@ void NBody::updateAcceleration(int bodyIndex )
                                   _bodies[bodyIndex]->_position,
                                   _bodies[i]->_position);
 
-    debug(scalarForceBetween)
+    //debug(scalarForceBetween)
     direction( 
       _bodies[bodyIndex]->_position,
       _bodies[i]->_position,
@@ -107,10 +107,10 @@ void NBody::updateAcceleration(int bodyIndex )
     netForce._z += vectorForceToOther._z;
   }
 
-    debug(netForce)
+    //debug(netForce)
 
     _bodies[bodyIndex]->_acceleration = computeAccel3D(_bodies[bodyIndex]->_mass, netForce);
-    debug(_bodies[bodyIndex]->_acceleration);
+    //debug(_bodies[bodyIndex]->_acceleration);
 }
 
 void NBody::updateVelocity( int bodyIndex, float deltaT ) 
@@ -119,7 +119,7 @@ void NBody::updateVelocity( int bodyIndex, float deltaT )
                                 _bodies[bodyIndex]->_acceleration,
                                 _bodies[bodyIndex]->_velocity,
                                 deltaT);
-    debug(_bodies[bodyIndex]->_velocity)
+    //debug(_bodies[bodyIndex]->_velocity)
 }
 
 void NBody::updatePosition( int bodyIndex, float deltaT ) 

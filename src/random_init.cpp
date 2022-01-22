@@ -15,7 +15,7 @@ Vec3 randomParticlePos()
 	// Random position on a 'thick disk'
 	Vec3 pos;
 	float t = ( (double)rand() / RAND_MAX ) *2*PI;
-	float s = ( (double)rand() / RAND_MAX )*100.;
+	float s = ( (double)rand() / RAND_MAX )*1.;
 	pos._x = cos(t)*s;
 	pos._y = sin(t)*s;
 	pos._z = (rand()*4.) / float(RAND_MAX);
