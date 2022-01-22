@@ -1,23 +1,19 @@
+
+# Consider dependencies only in project.
+set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
+
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
-  "CXX"
   )
-# The set of files for implicit dependencies of each language:
-set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/abdel_dakri/work/Projet_GPGPU/src/Body.cpp" "/home/abdel_dakri/work/Projet_GPGPU/build/CMakeFiles/nbody.dir/src/Body.cpp.o"
-  "/home/abdel_dakri/work/Projet_GPGPU/src/NBody.cpp" "/home/abdel_dakri/work/Projet_GPGPU/build/CMakeFiles/nbody.dir/src/NBody.cpp.o"
-  "/home/abdel_dakri/work/Projet_GPGPU/src/Physics.cpp" "/home/abdel_dakri/work/Projet_GPGPU/build/CMakeFiles/nbody.dir/src/Physics.cpp.o"
-  "/home/abdel_dakri/work/Projet_GPGPU/src/Vec3.cpp" "/home/abdel_dakri/work/Projet_GPGPU/build/CMakeFiles/nbody.dir/src/Vec3.cpp.o"
-  "/home/abdel_dakri/work/Projet_GPGPU/src/Viewer.cpp" "/home/abdel_dakri/work/Projet_GPGPU/build/CMakeFiles/nbody.dir/src/Viewer.cpp.o"
-  "/home/abdel_dakri/work/Projet_GPGPU/src/main.cpp" "/home/abdel_dakri/work/Projet_GPGPU/build/CMakeFiles/nbody.dir/src/main.cpp.o"
-  "/home/abdel_dakri/work/Projet_GPGPU/src/random_init.cpp" "/home/abdel_dakri/work/Projet_GPGPU/build/CMakeFiles/nbody.dir/src/random_init.cpp.o"
-  )
-set(CMAKE_CXX_COMPILER_ID "GNU")
 
-# The include file search paths:
-set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "../include"
-  "/usr/lib/cmake/glm"
+# The set of dependency files which are needed:
+set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/baugih/gpgpu/ray-traced-n-body-simulation/src/Body.cpp" "CMakeFiles/nbody.dir/src/Body.cpp.o" "gcc" "CMakeFiles/nbody.dir/src/Body.cpp.o.d"
+  "/home/baugih/gpgpu/ray-traced-n-body-simulation/src/NBody.cpp" "CMakeFiles/nbody.dir/src/NBody.cpp.o" "gcc" "CMakeFiles/nbody.dir/src/NBody.cpp.o.d"
+  "/home/baugih/gpgpu/ray-traced-n-body-simulation/src/Vec3.cpp" "CMakeFiles/nbody.dir/src/Vec3.cpp.o" "gcc" "CMakeFiles/nbody.dir/src/Vec3.cpp.o.d"
+  "/home/baugih/gpgpu/ray-traced-n-body-simulation/src/Viewer.cpp" "CMakeFiles/nbody.dir/src/Viewer.cpp.o" "gcc" "CMakeFiles/nbody.dir/src/Viewer.cpp.o.d"
+  "/home/baugih/gpgpu/ray-traced-n-body-simulation/src/main.cpp" "CMakeFiles/nbody.dir/src/main.cpp.o" "gcc" "CMakeFiles/nbody.dir/src/main.cpp.o.d"
+  "/home/baugih/gpgpu/ray-traced-n-body-simulation/src/random_init.cpp" "CMakeFiles/nbody.dir/src/random_init.cpp.o" "gcc" "CMakeFiles/nbody.dir/src/random_init.cpp.o.d"
   )
 
 # Targets to which this target links.

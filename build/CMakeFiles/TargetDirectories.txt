@@ -1,3 +1,3 @@
-/home/abdel_dakri/work/Projet_GPGPU/build/CMakeFiles/edit_cache.dir
-/home/abdel_dakri/work/Projet_GPGPU/build/CMakeFiles/rebuild_cache.dir
-/home/abdel_dakri/work/Projet_GPGPU/build/CMakeFiles/nbody.dir
+/home/baugih/gpgpu/ray-traced-n-body-simulation/build/CMakeFiles/nbody.dir
+/home/baugih/gpgpu/ray-traced-n-body-simulation/build/CMakeFiles/edit_cache.dir
+/home/baugih/gpgpu/ray-traced-n-body-simulation/build/CMakeFiles/rebuild_cache.dir
