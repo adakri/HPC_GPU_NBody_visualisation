@@ -1,3 +1,0 @@
-/home/baugih/gpgpu/ray-traced-n-body-simulation/build/CMakeFiles/nbody.dir
-/home/baugih/gpgpu/ray-traced-n-body-simulation/build/CMakeFiles/edit_cache.dir
-/home/baugih/gpgpu/ray-traced-n-body-simulation/build/CMakeFiles/rebuild_cache.dir
