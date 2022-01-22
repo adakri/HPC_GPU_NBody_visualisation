@@ -1,15 +1,16 @@
-#include "Physics.hpp"
 #include "random_init.hpp"
+#include "Body.hpp"
 
 class NBody 
 {
     private:
-        std::vector<Body*> _bodies;
         int _N;
         float _tf;
         int _timeSteps;
         float _deltaT;
     public:
+        std::vector<Body*> _bodies;
+        
         NBody(int, float, int);
         ~NBody() 
         { 
@@ -23,13 +24,15 @@ class NBody
         void print_sim();
 
         //Physics
-        void resolveCollisions();
-        void computeAccelerations();
-        void computeVelocities(float);
-        void computePositions(float);
-        void getTimeSteps();
-        void cycle(float);
-        void simulate();
+        void display_bodies();
+        void compute();
+        void updateAcceleration(int);
+        void updateVelocity(int, float);
+        void updatePosition(int, float);
+        void updatePhysics(float);
+
+        //drawing with SFML (or SDL)
+
 
         //getters and setters
         int get_N() const {return _N;}

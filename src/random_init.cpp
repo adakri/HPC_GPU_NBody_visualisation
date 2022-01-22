@@ -9,29 +9,35 @@ using namespace std;
 
 Vec3 randomParticlePos()
 {
-    /* initialize random seed: */
-    srand (time(NULL));
+
+	//std::cout<<( (double)rand() / RAND_MAX )<<std::endl;
 
 	// Random position on a 'thick disk'
 	Vec3 pos;
-	float t = (rand() / float(RAND_MAX)) *2*PI;
-	debug(t)
-	float s = rand()*100. / float(RAND_MAX);
-	debug(s)
+	float t = ( (double)rand() / RAND_MAX ) *2*PI;
+	float s = ( (double)rand() / RAND_MAX )*100.;
 	pos._x = cos(t)*s;
 	pos._y = sin(t)*s;
 	pos._z = (rand()*4.) / float(RAND_MAX);
 
+	//std::cout<<pos._x<<" "<<pos._y<<" "<<pos._z<<std::endl;
 	return pos;
 }
 
 Vec3 randomParticleVel()
 {
-    /* initialize random seed: */
-    srand (time(NULL));
 
 	// Initial velocity is 'orbital' velocity from position
 	Vec3 vel = Vec3(rand() * 20. / RAND_MAX, rand() * 20. / RAND_MAX, 0.);
+	return vel;
+}
+
+
+Vec3 randomParticleacceleration()
+{
+
+	// Initial velocity is 'orbital' velocity from position
+	Vec3 vel = Vec3(rand() * 2. / RAND_MAX, rand() * 2. / RAND_MAX, 0.);
 	return vel;
 }
 

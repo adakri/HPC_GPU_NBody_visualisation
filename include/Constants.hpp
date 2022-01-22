@@ -5,15 +5,15 @@
 #include <iostream>
 
 
-#define debug(a) std::cout<<"*** DEBUG: "<<#a<<" "<<a<<std::endl;
+#define debug(a) std::cout<<"*** DEBUG ***: "<<#a<<" "<<a<<std::endl;
 
 /* Universal Gravitational Constant */
-const double G = 6.67E-11;
+const double G = 6.67E-1;
 
 /* Number of bodies to be run in the simulation */
 const int kBodyCount = 500;
 
-/* Mass constants - scaled for OpenFrameworks */
+/* Mass constants*/
 const double kMassScale = 1E-15;
 const double kSolarMass = 1.989E30;
 const double kSolarMassScaled = kMassScale * kSolarMass;

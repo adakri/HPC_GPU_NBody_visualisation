@@ -29,7 +29,7 @@ class Body {
       _radius = r;
     }
 
-    /* Will draw the body in the OpenFrameworks application. */
+    /* Will draw the body in the application. */
     void Draw() const;
     /*
       Update the position of the body by modeling the body movement with the given time step.

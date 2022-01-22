@@ -42,7 +42,7 @@ class Vec3 {
       spec_t norm2() const;
       void normalize();
       void invert();
-      Force forceNewtonianGravity3D();
+      
 
 
       Vec3 operator+(const Vec3& v);
@@ -74,6 +74,16 @@ typedef double Scalar;
 typedef Scalar Mass;
 typedef Scalar Time;
 
+
+
+//physics protoytype (maybe in different file)
+void direction(const Vec3 &,const Vec3 &,Vec3 &);
+Force forceNewtonianGravity3D(Mass, Mass ,Position3D , Position3D);
+Acceleration computeAccel( Mass, Force );
+Velocity computeVelo(Acceleration , Velocity, Time);
+Acceleration3D computeAccel3D(Mass , const Force3D &);
+Velocity3D computeVelo3D(Acceleration3D &, Velocity3D &, Time);
+Position3D computePos3D(Velocity3D &, Position3D &, Time );
 
 
 #endif

@@ -1,6 +1,10 @@
 #include <glm/glm.hpp>
 #include <vector>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
 #include "Vec3.hpp"
 
 /**
@@ -15,4 +19,7 @@ Vec3 randomParticlePos();
  * @return 3D velocity 
  */
 Vec3 randomParticleVel();
+
+//same
+Vec3 randomParticleacceleration();
 
