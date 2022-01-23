@@ -23,3 +23,9 @@ Vec3 randomParticleVel();
 //same
 Vec3 randomParticleacceleration();
 
+//same 
+float random_mass();
+
+//same
+float random_radius();
+

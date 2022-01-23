@@ -98,7 +98,7 @@ Force forceNewtonianGravity3D(
     return 0;
   }
 
-  Force result = G * (onMass * becauseOfMass) /  (distance * distance);
+  Force result = - G * (onMass * becauseOfMass) /  (distance * distance);
   return result;
 };
 

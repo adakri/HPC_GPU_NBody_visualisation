@@ -13,14 +13,12 @@ Vec3 randomParticlePos()
 	//std::cout<<( (double)rand() / RAND_MAX )<<std::endl;
 
 	// Random position on a 'thick disk'
-	Vec3 pos;
-	float t = ( (double)rand() / RAND_MAX ) *2*PI;
-	float s = ( (double)rand() / RAND_MAX )*1.;
-	pos._x = cos(t)*s;
-	pos._y = sin(t)*s;
-	pos._z = (rand()*4.) / float(RAND_MAX);
+	Vec3 pos = Vec3(
+		(((float) rand()) / (float) RAND_MAX) * 400. - 200.,
+		(((float) rand()) / (float) RAND_MAX) * 200.,
+		(-1000.) 
+		); 
 
-	//std::cout<<pos._x<<" "<<pos._y<<" "<<pos._z<<std::endl;
 	return pos;
 }
 
@@ -28,7 +26,11 @@ Vec3 randomParticleVel()
 {
 
 	// Initial velocity is 'orbital' velocity from position
-	Vec3 vel = Vec3(rand() * 20. / RAND_MAX, rand() * 20. / RAND_MAX, 0.);
+	Vec3 vel = Vec3(
+		(((float) rand()) / (float) RAND_MAX) * 80. - 30.,
+		(((float) rand()) / (float) RAND_MAX) * 60. - 30.,
+		0.
+		); 
 	return vel;
 }
 
@@ -37,8 +39,17 @@ Vec3 randomParticleacceleration()
 {
 
 	// Initial velocity is 'orbital' velocity from position
-	Vec3 vel = Vec3(rand() * 2. / RAND_MAX, rand() * 2. / RAND_MAX, 0.);
+	Vec3 vel = Vec3(0.,0.,0.);
 	return vel;
 }
 
 
+float random_mass()
+{
+	return ((float) rand()) / (float) RAND_MAX * (kMaxMass-kMinMass + 1) + kMinMass;
+}
+
+float random_radius()
+{
+	return ((float) rand()) / (float) RAND_MAX * (kMaxRadius-kMinRadius + 1) + kMinRadius;
+}
