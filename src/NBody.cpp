@@ -14,7 +14,7 @@ NBody::NBody(int N , float tf, int timeSteps): _N(N), _tf(tf), _timeSteps(timeSt
     std::cout<<"===Initialising the bodies==="<<std::endl;
     for(int i=0; i<_N; i++)
     {
-        _bodies[i] = new Body(randomParticlePos(), randomParticleVel(), randomParticleacceleration(), 2., 10.);
+        _bodies[i] = new Body(randomParticlePos(), randomParticleVel(), Vec3(0.,0.,0.), random_mass(), random_radius());
 
         _bodies[i] -> isString();
     }
@@ -45,8 +45,7 @@ void NBody::display_bodies()
   {
     printf("\nBody %d:\nMass: %f\nPosition(x ,y, z): %f, %f, %f\nVelocity(x, y, z): %f, %f, %f\nAcceleration(x ,y, z): %f, %f, %f\n\n",
       i + 1, 
-      _bodies[i],
-
+      _bodies[i]->_mass,
       _bodies[i]->_position._x, _bodies[i]->_position._y, _bodies[i]->_position._z,
 
       _bodies[i]->_velocity._x, _bodies[i]->_velocity._y, _bodies[i]->_velocity._z,
