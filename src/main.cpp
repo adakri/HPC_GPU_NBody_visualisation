@@ -123,7 +123,7 @@ void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition ) {
    for( int i = 0; i < NBODY_COUNT; i++ ) {
       // Save
       sModelViewMatrixStack.PushMatrix();
-      sModelViewMatrixStack.Translate(0.0f, 0.0f, -1000.0f);
+      sModelViewMatrixStack.Translate(0.0f, 0.0f, -3000.0f);
       sModelViewMatrixStack.Rotate(1.0f, 0.0f, 1.0f, 1.0f);
 
       // update position with regard to new values

@@ -20,7 +20,6 @@ class NBody
             }
         }
 
-        void print_cycle(float);
         void print_sim();
 
         //Physics

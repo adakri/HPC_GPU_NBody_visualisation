@@ -8,7 +8,7 @@
 #define debug(a) std::cout<<"*** DEBUG ***: "<<#a<<" "<<a<<std::endl;
 
 /* Universal Gravitational Constant */
-const double G = 6.67E-11;
+const double G = 6.67E-13;
 
 /* Mass constants*/
 const double kMassScale = 1E-15;

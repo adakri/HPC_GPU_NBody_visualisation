@@ -22,22 +22,6 @@ NBody::NBody(int N , float tf, int timeSteps): _N(N), _tf(tf), _timeSteps(timeSt
         
 }
 
-void NBody::print_cycle(float t)
-{
-    for (int i = 0; i < _N; i++)
-    {
-        printf("Cycle %2.2f :  \n", i);
-        std::cout<<"========================="<<std::endl;
-        printf(
-        " Body %d : Mass %3.3f and Radius %3.3f - Position ( %8.4f , %8.4f )- Velocity ( %8.4f , %8.4f ) - Acceleration ( %8.4f , %8.4f ) \n)" 
-        , _bodies[i]->_mass, _bodies[i]->_radius, 
-        _bodies[i]->_position._x, _bodies[i]->_position._y, 
-        _bodies[i]->_velocity._x, _bodies[i]->_velocity._y,
-        _bodies[i]->_acceleration._x, _bodies[i]->_acceleration._y
-        );
-    }
-    
-}
 
 void NBody::display_bodies()
 {
