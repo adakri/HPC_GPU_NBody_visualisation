@@ -123,6 +123,9 @@ void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition ) {
    for( int i = 0; i < NBODY_COUNT; i++ ) {
       // Save
       sModelViewMatrixStack.PushMatrix();
+      sModelViewMatrixStack.Translate(0.0f, 0.0f, -1000.0f);
+      sModelViewMatrixStack.Rotate(1.0f, 0.0f, 1.0f, 1.0f);
+
       // update position with regard to new values
       sBodyFrames[i].SetOrigin( simul->_bodies[i]->_position._x,
                                 simul->_bodies[i]->_position._y,
