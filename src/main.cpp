@@ -115,7 +115,7 @@ NBody* simul = new NBody(NBODY_COUNT, 10., 2);
 void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition ) {
    // compute displacement and new vectors
    static float previousTime = 0.0f;
-   sleep(3); 
+   
    float currentTime = timeKeeper->GetElapsedSeconds();
    simul->updatePhysics( currentTime - previousTime );
    previousTime = currentTime;
@@ -123,7 +123,7 @@ void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition ) {
    for( int i = 0; i < NBODY_COUNT; i++ ) {
       // Save
       sModelViewMatrixStack.PushMatrix();
-      sModelViewMatrixStack.Translate(0.0f, 0.0f, -3000.0f);
+      sModelViewMatrixStack.Translate(0.0f, 0.0f, -1000.0f);
       sModelViewMatrixStack.Rotate(1.0f, 0.0f, 1.0f, 1.0f);
 
       // update position with regard to new values
