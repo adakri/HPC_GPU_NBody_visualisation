@@ -38,7 +38,7 @@ using std::endl;
 
 const int APP_WIDTH = 1080;
 const int APP_HEIGHT = 720;
-const int NBODY_COUNT = 100;
+const int NBODY_COUNT = 6;
 const char* APP_NAME = "Test Freeglut";
 
 
@@ -85,7 +85,7 @@ void setupWindow( int argc, char **argv )
 ///////////////////////////////////////////////////////////////////////
 // Callbacks
 // GL constant
-const static float APP_CAMERA_FOV = 40.0f;
+const static float APP_CAMERA_FOV = 50.0f;
 const static float APP_CAMERA_NEAR = 1.0f;
 const static float APP_CAMERA_FAR = 10000.f;
 
@@ -115,7 +115,7 @@ NBody* simul = new NBody(NBODY_COUNT, 10., 2);
 void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition ) {
    // compute displacement and new vectors
    static float previousTime = 0.0f;
-   sleep(3); 
+   //sleep(3); 
    float currentTime = timeKeeper->GetElapsedSeconds();
    simul->updatePhysics( currentTime - previousTime );
    previousTime = currentTime;

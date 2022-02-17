@@ -1,5 +1,4 @@
-#include "random_init.hpp"
-#include "Body.hpp"
+#include "Physics.hpp"
 
 class NBody 
 {

@@ -7,7 +7,7 @@ const float PI = 3.14159265358979323846;
 using namespace std;
 
 
-Vec3 randomParticlePos()
+Vec3 randomParticlePosition()
 {
 
 	//std::cout<<( (double)rand() / RAND_MAX )<<std::endl;
@@ -15,20 +15,20 @@ Vec3 randomParticlePos()
 	// Random position on a 'thick disk'
 	Vec3 pos = Vec3(
 		(((float) rand()) / (float) RAND_MAX) * 400. - 200.,
-		(((float) rand()) / (float) RAND_MAX) * 200.,
-		(-1000.) 
+		(((float) rand()) / (float) RAND_MAX) * 200. ,
+		(((float) rand()) / (float) RAND_MAX) * -2500. - 800 
 		); 
 
 	return pos;
 }
 
-Vec3 randomParticleVel()
+Vec3 randomParticleVelocity()
 {
 
 	// Initial velocity is 'orbital' velocity from position
 	Vec3 vel = Vec3(
-		(((float) rand()) / (float) RAND_MAX) * 80. - 30.,
-		(((float) rand()) / (float) RAND_MAX) * 60. - 30.,
+		0.,
+		0.,
 		0.
 		); 
 	return vel;
