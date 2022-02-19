@@ -34,7 +34,7 @@ using std::endl;
 
 #define debug std::cout<<"debug"<<std::endl;
 
-
+bool CUDA = false;
 
 const int APP_WIDTH = 1080;
 const int APP_HEIGHT = 720;
@@ -117,7 +117,14 @@ void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition ) {
    static float previousTime = 0.0f;
    //sleep(3); 
    float currentTime = timeKeeper->GetElapsedSeconds();
-   simul->updatePhysics( currentTime - previousTime );
+   if(CUDA)
+   {
+      //copy all to cuda class
+      
+   }else{
+      simul->updatePhysics( currentTime - previousTime );
+   }
+   
    previousTime = currentTime;
 
    for( int i = 0; i < NBODY_COUNT; i++ ) {
