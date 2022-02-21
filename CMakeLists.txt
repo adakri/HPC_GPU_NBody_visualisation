@@ -22,6 +22,11 @@ SET( NBODY_SRC
   OpenGL_libs/src/GLBatch.cpp OpenGL_libs/src/glew.c OpenGL_libs/src/GLShaderManager.cpp OpenGL_libs/src/GLTools.cpp OpenGL_libs/src/GLTriangleBatch.cpp OpenGL_libs/src/math3d.cpp
 )
 
+SET( NBODY_SRC_CUDA
+  #.cu & .cpp
+  src/Body.cpp src/Vec3.cpp src/random_init.cpp src/NBody.cpp src/Viewer.cpp src/Physics.cpp
+)
+
 
 
 # Here the building scheme diverge 
@@ -35,8 +40,8 @@ if(PARALLEL)
   find_package(CUDA)
   if(CUDA_FOUND)
     enable_language(CUDA)
-    include_directories(cuda_kernels)
-    add_executable(nbody_cuda cuda_kernels/NBody_cuda.cu ${NBODY_SRC})
+    include_directories(cuda_kernels include)
+    add_executable(nbody_cuda cuda_kernels/NBody_cuda.cu ${NBODY_SRC_CUDA})
   endif()
 else()
   message("========================")
