@@ -44,8 +44,10 @@ class NBody_cuda
 //constructor
 NBody_cuda::NBody_cuda(int Nu , float tf, int timeSteps): _N(Nu), _tf(tf), _timeSteps(timeSteps) 
 {
+  std::cout<<"=====Constructed the NBody class in cuda===="<<std::endl;
 };
 
+// useless tbh
 void NBody_cuda::display_bodies()
 {
   for( int i = 0; i < _N; i++ ) 
@@ -94,9 +96,13 @@ void d_updateAcceleration(int index, vector *d_pos,vector *d_acc, Mass *d_mass, 
     netForce._x += vectorForceToOther._x;
     netForce._y += vectorForceToOther._y;
     netForce._z += vectorForceToOther._z;
+
+    printf("The force %d: %f %f %f \n", index, netForce._x, netForce._y, netForce._z);
   }
 
   d_acc[index] = computeAcceleration3D(d_mass[index], netForce);
+
+  printf("The accelerations: %d : %f %f %f \n", index,d_acc[index]._x, d_acc[index]._y, d_acc[index]._z);
 };
 
 __device__
@@ -106,6 +112,7 @@ void d_updateVelocity(int index, float deltaT, vector *d_acc, vector *d_vel)
                                 d_acc[index],
                                 d_vel[index],
                                 deltaT);
+  printf("The velocities: %d : %f %f %f \n", index,d_vel[index]._x, d_vel[index]._y, d_vel[index]._z);
 };
 
 __device__
@@ -116,6 +123,7 @@ void d_updatePosition(int index, float deltaT, vector *d_vel, vector *d_pos)
                               d_vel[index],
                               d_pos[index],
                               deltaT);
+  printf("The positions: %d : %f %f %f \n", index,d_pos[index]._x, d_pos[index]._y, d_pos[index]._z);
 };
 
 
@@ -129,12 +137,29 @@ void updatePhysics(int bodies, float deltaT, vector *d_pos, vector *d_vel, vecto
 
   int element_id = (blockidx * threadidx) + threadidx;
 
+  printf("the element id %d \n", element_id);
+
   if(element_id > _N)
     return;
-  
+
+  //printf("%s \n", "===== The positions in the updatePhys b4==== \n");
+  for(int i=1; i<element_id; i++)
+  {
+    d_pos++;
+  }
+  printf("@ %d %f, %f, %f \n",element_id,d_pos->_x,d_pos->_y,d_pos->_z);
+
+
   d_updateAcceleration(element_id, d_pos, d_acc, d_mass, _N);
   d_updateVelocity(element_id, deltaT, d_acc, d_vel);
   d_updatePosition(element_id, deltaT, d_vel, d_pos);
+
+  //printf("%s \n", "===== The positions in the updatePhys==== \n");
+  for(int i=0; i<element_id; i++)
+  {
+    d_pos++;
+  }
+  printf("* %d %f, %f, %f \n",element_id,d_pos->_x,d_pos->_y,d_pos->_z);
 };
 
 
@@ -171,10 +196,21 @@ void NBody_cuda::setUP_cuda()
   cudaMemcpy(d_pos, h_pos, VECTOR_SIZE_IN_BYTES, cudaMemcpyHostToDevice);
 
 
-
-  for (int i = 0; i < 10000; ++i)
+  std::cout<<"===== The starting positions===="<<std::endl;
+  for(int i=0; i<_N; i++)
   {
-    updatePhysics<<<(_N/16) + 1, 16>>>(_N, (float)(i * 100), d_pos, d_vel, d_acc, d_mass, _N);
+    std::cout<<h_pos->_x<<","<<h_pos->_y<<","<<h_pos->_z<<std::endl;
+    h_pos++;
+  }
+
+
+
+  for (int i = 0; i < 1; ++i)
+  {
+    printf("The number of 32 thread blocks %d \n", (int)ceil(_N/32));
+
+    std::cout << "AT time step "<<(float)(100 * i) << std::endl;
+    updatePhysics<<<(int)ceil(_N/32), 32>>>(_N, (float)(i * 100), d_pos, d_vel, d_acc, d_mass, _N);
   }
     
 
@@ -185,6 +221,15 @@ void NBody_cuda::setUP_cuda()
   cudaFree(d_vel);
   cudaFree(d_acc);
   cudaFree(d_mass);
+
+  std::cout<<"===== The Final positions===="<<std::endl;
+  for(int i=0; i<_N; i++)
+  {
+    std::cout<<h_pos->_x<<","<<h_pos->_y<<","<<h_pos->_z<<std::endl;
+    h_pos++;
+  }
+
+  
 
 }
 

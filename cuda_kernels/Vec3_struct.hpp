@@ -106,12 +106,19 @@ Force ComputeForce(
   Scalar delta_z = becauseOfPosition._z - onPosition._z;
   Scalar distance = sqrt(delta_x * delta_x + delta_y * delta_y + delta_z * delta_z);
 
-  if( distance == 0 ) 
+  //printf("Inside the force comp %f \n", distance);
+
+  if( distance == 0. ) 
   {
-    return 0;
+    return 0.;
   }
 
-  Force result = G * (onMass * becauseOfMass) /  (distance * distance);
+  //printf("debug %f %f %f \n", onMass, becauseOfMass, G * (onMass * becauseOfMass) /  (distance * distance));
+
+  Force result = (float)G * (float)(onMass * becauseOfMass) /  (float)(distance * distance);
+
+  //printf("Inside the force comp G %f \n", result);
+
   return result;
 };
 
