@@ -1,4 +1,4 @@
-#include "NBody.hpp"
+#include "Vec3_struct.hpp"
 
 #include <cuda.h>
 
@@ -11,32 +11,25 @@
 
 
 __device__
-void d_updateAcceleration(int, Position3D *,Acceleration3D *,Mass *, int);
+void d_updateAcceleration(int, vector *,vector *,Mass *, int);
 
 __device__
-void d_updateVelocity(int , float , Acceleration3D *, Velocity3D *); 
+void d_updateVelocity(int , float , vector *, vector *); 
 
 
 __device__
-void d_updatePosition(int, float, Velocity3D *,Position3D *); 
+void d_updatePosition(int, float, vector *,vector *); 
 
 
 __global__
-void d_updatePhysics(int, float, Position3D *, Velocity3D *,Acceleration3D *,Mass *, int);
+void d_updatePhysics(int, float, vector *, vector *,vector *,Mass *, int);
 
-// Can not use a class declaration inside a device function
-typedef struct vector 
-{
-  spec_t _x;
-  spec_t _y;
-  spec_t _z;
-};
 
 
 
 // demo (from this astrophysics github page)
 # define N 18
-static Position3D nBodyPosition[N] = 
+static vector nBodyPosition[N] = 
 {
   { 0.0f, 0.0f, -1000.0f },
   { 0.0f, 200.0f, -1000.0f },
@@ -58,7 +51,7 @@ static Position3D nBodyPosition[N] =
   { -200.0f, 0.0f, -1000.0f },
 };
 
-static Velocity3D nBodyVelocity[N] = 
+static vector nBodyVelocity[N] = 
 {
   { 0.0f, 0.0f, 0.0f },
   { -30.0f, -30.0f, -30.0f },
@@ -80,7 +73,7 @@ static Velocity3D nBodyVelocity[N] =
   { 30.0f, 30.0f, 30.0f }
 };
 
-static Acceleration3D nBodyAcceleration[N] = 
+static vector nBodyAcceleration[N] = 
 {
   { 0.0f, 0.0f, 0.0f },
   { 0.0f, 0.0f, 0.0f },

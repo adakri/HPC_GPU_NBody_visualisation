@@ -1,6 +1,7 @@
 #include "Physics.cuh"
 
 #include <vector>
+#include <chrono>
 
 //https://gist.github.com/lebedov/bca3c70e664f54cdf8c3cd0c28c11a0f
 
@@ -21,7 +22,7 @@ class NBody_cuda
             {
                 delete _bodies[i];
             }
-        }
+        };
 
         void print_cycle(float);
         void print_sim();
@@ -41,7 +42,9 @@ class NBody_cuda
 
 
 //constructor
-
+NBody_cuda::NBody_cuda(int Nu , float tf, int timeSteps): _N(Nu), _tf(tf), _timeSteps(timeSteps) 
+{
+};
 
 void NBody_cuda::display_bodies()
 {
@@ -60,7 +63,7 @@ void NBody_cuda::display_bodies()
 
 // compute acceleration per thread
 __device__
-void d_updateAcceleration(int index, Position3D *d_pos,Acceleration3D *d_acc, Mass *d_mass, int _N) 
+void d_updateAcceleration(int index, vector *d_pos,vector *d_acc, Mass *d_mass, int _N) 
 {
    
   vector netForce = { 0, 0, 0 };
@@ -74,13 +77,15 @@ void d_updateAcceleration(int index, Position3D *d_pos,Acceleration3D *d_acc, Ma
 
     vector vectorForceToOther = {0, 0, 0};
 
-    Force scalarForceBetween = forceNewtonianGravity3D(
+    Force scalarForceBetween = ComputeForce(
                                   d_mass[index],
                                   d_mass[i],
                                   d_pos[index],
                                   d_pos[i]);
 
-    direction( d_pos[index],d_pos[i],vectorForceToOther);
+
+
+    v_direction( d_pos[index],d_pos[i],vectorForceToOther);
 
     vectorForceToOther._x *= scalarForceBetween;
     vectorForceToOther._y *= scalarForceBetween;
@@ -91,23 +96,23 @@ void d_updateAcceleration(int index, Position3D *d_pos,Acceleration3D *d_acc, Ma
     netForce._z += vectorForceToOther._z;
   }
 
-  d_acc[index] = computeAccel3D(d_mass[index], netForce);
+  d_acc[index] = computeAcceleration3D(d_mass[index], netForce);
 };
 
 __device__
-void d_updateVelocity(int index, float deltaT, Acceleration3D *d_acc, Velocity3D *d_vel) 
+void d_updateVelocity(int index, float deltaT, vector *d_acc, vector *d_vel) 
 {
-  d_vel[index] = computeVelo3D(
+  d_vel[index] = computeVelocity3D(
                                 d_acc[index],
                                 d_vel[index],
                                 deltaT);
 };
 
 __device__
-void d_updatePosition(int index, float deltaT, Velocity3D *d_vel, Position3D *d_pos) 
+void d_updatePosition(int index, float deltaT, vector *d_vel, vector *d_pos) 
 {
 
-  d_pos[index] = computePos3D( 
+  d_pos[index] = computePosition3D( 
                               d_vel[index],
                               d_pos[index],
                               deltaT);
@@ -115,7 +120,7 @@ void d_updatePosition(int index, float deltaT, Velocity3D *d_vel, Position3D *d_
 
 
 __global__
-void updatePhysics(int bodies, float deltaT, Position3D *d_pos, Velocity3D *d_vel, Acceleration3D *d_acc, Mass *d_mass, int _N)
+void updatePhysics(int bodies, float deltaT, vector *d_pos, vector *d_vel, vector *d_acc, Mass *d_mass, int _N)
 {
   
   // 1D blocks and thread organisation
@@ -135,22 +140,21 @@ void updatePhysics(int bodies, float deltaT, Position3D *d_pos, Velocity3D *d_ve
 
 // The execution is very different 
 void NBody_cuda::setUP_cuda()
-{
-  double start, end, min = 1e5;
+{  
 
   // the C syntax
   int VECTOR_SIZE_IN_BYTES = _N * sizeof(vector);
   int SCALAR_SIZE_IN_BYTES = _N * sizeof(Scalar);
 
   //Initializing Velocities of N bodies in GPU
-  Velocity3D *h_vel = nBodyVelocity;
-  Velocity3D *d_vel;
+  vector *h_vel = nBodyVelocity;
+  vector *d_vel;
   cudaMalloc((void**) &d_vel, VECTOR_SIZE_IN_BYTES);
   cudaMemcpy(d_vel, h_vel, VECTOR_SIZE_IN_BYTES, cudaMemcpyHostToDevice);
 
   //Initializing acceleration of N bodies in GPU
-  Acceleration3D *h_acc = nBodyAcceleration;
-  Acceleration3D *d_acc;
+  vector *h_acc = nBodyAcceleration;
+  vector *d_acc;
   cudaMalloc((void**) &d_acc, VECTOR_SIZE_IN_BYTES);
   cudaMemcpy(d_acc, h_acc, VECTOR_SIZE_IN_BYTES, cudaMemcpyHostToDevice);
   
@@ -161,20 +165,19 @@ void NBody_cuda::setUP_cuda()
   cudaMemcpy(d_mass, h_mass, SCALAR_SIZE_IN_BYTES, cudaMemcpyHostToDevice);
 
     //Initializing Positions of N bodies in GPU
-  Position3D *h_pos = nBodyPosition;
-  Position3D *d_pos;
+  vector *h_pos = nBodyPosition;
+  vector *d_pos;
   cudaMalloc((void**) &d_pos, VECTOR_SIZE_IN_BYTES);
   cudaMemcpy(d_pos, h_pos, VECTOR_SIZE_IN_BYTES, cudaMemcpyHostToDevice);
 
 
-  for (int j = 0; j < 3; ++j)
+
+  for (int i = 0; i < 10000; ++i)
   {
-    for (int i = 0; i < 10000; ++i)
-    {
-      updatePhysics<<<(_N/16) + 1, 16>>>(_N, (float)(i * 100), d_pos, d_vel, d_acc, d_mass, _N);
-    }
-    
+    updatePhysics<<<(_N/16) + 1, 16>>>(_N, (float)(i * 100), d_pos, d_vel, d_acc, d_mass, _N);
   }
+    
+
   cudaMemcpy(h_pos, d_pos, VECTOR_SIZE_IN_BYTES, cudaMemcpyDeviceToHost);
   cudaMemcpy(h_vel, d_vel, VECTOR_SIZE_IN_BYTES, cudaMemcpyDeviceToHost);
   cudaMemcpy(h_acc, d_acc, VECTOR_SIZE_IN_BYTES, cudaMemcpyDeviceToHost);
@@ -183,5 +186,18 @@ void NBody_cuda::setUP_cuda()
   cudaFree(d_acc);
   cudaFree(d_mass);
 
-  printf("Time Taken by CUDA implementation: %f ms\n", (min)*1000);
+}
+
+int main() 
+{
+  NBody_cuda nbody = NBody_cuda(N,1.,2);
+
+  std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+  
+  nbody.setUP_cuda();
+  
+  std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+  //Computing the time
+  std::cout << "Time taken by the CUDA kernel is " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
 }
