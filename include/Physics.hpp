@@ -11,7 +11,7 @@ class Physics
         Physics(Physics&)=default;
 
         // Static functions for physics
-        static Force ComputeForce(Mass, Mass, Position3D, Position3D);
+        static Force ComputeForce(Mass, Mass, Position3D, Position3D,Velocity3D&);
 
         static Acceleration computeAcceleration( Mass, Force);
         static Velocity computeVelocity(Acceleration, Velocity, Time);
