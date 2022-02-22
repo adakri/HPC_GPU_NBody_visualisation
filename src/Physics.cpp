@@ -7,12 +7,16 @@ Force Physics::ComputeForce(
           Mass onMass, 
           Mass becauseOfMass,
           Position3D onPosition, 
-          Position3D becauseOfPosition) 
+          Position3D becauseOfPosition,
+          Velocity3D& onVelocity) 
 {
   Scalar delta_x = becauseOfPosition._x - onPosition._x;
   Scalar delta_y = becauseOfPosition._y - onPosition._y;
   Scalar delta_z = becauseOfPosition._z - onPosition._z;
   Scalar distance = sqrt(delta_x * delta_x + delta_y * delta_y + delta_z * delta_z);
+
+  if(distance< (kMinRadius+kMaxRadius)/2.)
+    onVelocity.invert();
 
   if( distance == 0 ) 
   {
