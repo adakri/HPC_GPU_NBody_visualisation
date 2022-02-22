@@ -15,6 +15,8 @@ struct Node {
     int numberOfParticle;
     Vec3 coord;
     int width;
+    int particule = NULL; 
+
 };
 
 class Barnes {
@@ -25,6 +27,7 @@ class Barnes {
         void createOctree(std::vector<Body*> bodies);
         void insertInOctree(Body* body, struct Node octree);
         int determine(Body* body, std::vector<Node>);
+        std::vector<Node> subdivise(Node octree);
         void deleteEmptyNode(struct Node octree);
         void updateMass();
         void updateForces(std::vector<Body*> bodies);
