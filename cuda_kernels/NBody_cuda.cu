@@ -1,7 +1,15 @@
 #include "Physics.cuh"
+#include "GL_context.hpp"
 
 #include <vector>
 #include <chrono>
+
+
+
+bool DEMO_CUDA = false;
+
+
+
 
 //https://gist.github.com/lebedov/bca3c70e664f54cdf8c3cd0c28c11a0f
 
@@ -29,7 +37,7 @@ class NBody_cuda
 
         //Physics
         void display_bodies();
-        void setUP_cuda();
+        void setUP_cuda(float);
 
         //getters and setters
         int get_N() const {return _N;}
@@ -42,14 +50,38 @@ class NBody_cuda
 
 
 //constructor
-NBody_cuda::NBody_cuda(int Nu , float tf, int timeSteps): _N(Nu), _tf(tf), _timeSteps(timeSteps) 
+NBody_cuda::NBody_cuda(int N_b , float tf, int timeSteps): _N(N_b), _tf(tf), _timeSteps(timeSteps) 
 {
+  _bodies.resize(_N);
+  if(DEMO_CUDA)
+  {
+    for(int i=0; i<_N; i++)
+    {
+      _bodies[i] = new Body(
+        Vec3(nBodyPosition[i]._x,nBodyPosition[i]._y,nBodyPosition[i]._z),randomParticleVelocity(),
+        Vec3(nBodyVelocity[i]._x, nBodyVelocity[i]._y, nBodyVelocity[i]._z),
+        nBodyMass[i], random_radius()
+                                    );
+    }
+  }else{
+    for(int i=0; i<_N; i++)
+    {
+      _bodies[i] = new Body(randomParticlePosition(),
+                                  randomParticleVelocity(),
+                                    randomParticleacceleration(),
+                                    random_mass(),
+                                    random_radius()
+                                    );
+    }
+  }
+  
   std::cout<<"=====Constructed the NBody class in cuda===="<<std::endl;
 };
 
 // useless tbh
 void NBody_cuda::display_bodies()
 {
+
   for( int i = 0; i < _N; i++ ) 
   {
     printf("\nBody %d:\nMass: %f\nPosition(x ,y, z): %f, %f, %f\nVelocity(x, y, z): %f, %f, %f\nAcceleration(x ,y, z): %f, %f, %f\n\n",
@@ -65,7 +97,7 @@ void NBody_cuda::display_bodies()
 
 // compute acceleration per thread
 __device__
-void d_updateAcceleration(int index, vector *d_pos,vector *d_acc, Mass *d_mass, int _N) 
+void d_updateAcceleration(int index, vector *d_pos,vector* d_vel, vector *d_acc, Mass *d_mass, int _N) 
 {
    
   vector netForce = { 0, 0, 0 };
@@ -77,15 +109,16 @@ void d_updateAcceleration(int index, vector *d_pos,vector *d_acc, Mass *d_mass, 
       continue;
     }
 
-    vector vectorForceToOther = {0, 0, 0};
+    vector vectorForceToOther = {0., 0., 0.};
 
     Force scalarForceBetween = ComputeForce(
                                   d_mass[index],
                                   d_mass[i],
                                   d_pos[index],
-                                  d_pos[i]);
+                                  d_pos[i],
+                                  d_vel[index]);
 
-
+    //printf("scalarForceBetween %d : %d %f \n",index, i, scalarForceBetween);
 
     v_direction( d_pos[index],d_pos[i],vectorForceToOther);
 
@@ -93,16 +126,18 @@ void d_updateAcceleration(int index, vector *d_pos,vector *d_acc, Mass *d_mass, 
     vectorForceToOther._y *= scalarForceBetween;
     vectorForceToOther._z *= scalarForceBetween;
 
+    //printf("The vectorForceToOther %d: %d: %f %f %f \n", index, i, vectorForceToOther._x, vectorForceToOther._y, vectorForceToOther._z);
+
     netForce._x += vectorForceToOther._x;
     netForce._y += vectorForceToOther._y;
     netForce._z += vectorForceToOther._z;
 
-    printf("The force %d: %f %f %f \n", index, netForce._x, netForce._y, netForce._z);
+    //printf("The netForce %d: %d: %f %f %f \n", index, i, netForce._x, netForce._y, netForce._z);
   }
 
   d_acc[index] = computeAcceleration3D(d_mass[index], netForce);
 
-  printf("The accelerations: %d : %f %f %f \n", index,d_acc[index]._x, d_acc[index]._y, d_acc[index]._z);
+  //printf("The accelerations: %d : %f %f %f \n", index,d_acc[index]._x, d_acc[index]._y, d_acc[index]._z);
 };
 
 __device__
@@ -112,7 +147,7 @@ void d_updateVelocity(int index, float deltaT, vector *d_acc, vector *d_vel)
                                 d_acc[index],
                                 d_vel[index],
                                 deltaT);
-  printf("The velocities: %d : %f %f %f \n", index,d_vel[index]._x, d_vel[index]._y, d_vel[index]._z);
+  //printf("The velocities: %d : %f %f %f \n", index,d_vel[index]._x, d_vel[index]._y, d_vel[index]._z);
 };
 
 __device__
@@ -147,10 +182,10 @@ void updatePhysics(int bodies, float deltaT, vector *d_pos, vector *d_vel, vecto
   {
     d_pos++;
   }
-  printf("@ %d %f, %f, %f \n",element_id,d_pos->_x,d_pos->_y,d_pos->_z);
+  //printf("@ %d %f, %f, %f \n",element_id,d_pos->_x,d_pos->_y,d_pos->_z);
 
 
-  d_updateAcceleration(element_id, d_pos, d_acc, d_mass, _N);
+  d_updateAcceleration(element_id, d_pos, d_vel, d_acc, d_mass, _N);
   d_updateVelocity(element_id, deltaT, d_acc, d_vel);
   d_updatePosition(element_id, deltaT, d_vel, d_pos);
 
@@ -159,12 +194,13 @@ void updatePhysics(int bodies, float deltaT, vector *d_pos, vector *d_vel, vecto
   {
     d_pos++;
   }
-  printf("* %d %f, %f, %f \n",element_id,d_pos->_x,d_pos->_y,d_pos->_z);
+  //printf("* %d %f, %f, %f \n",element_id,d_pos->_x,d_pos->_y,d_pos->_z);
 };
 
 
 // The execution is very different 
-void NBody_cuda::setUP_cuda()
+// Compute through GPU the update at time time and update the body ppoisitons
+void NBody_cuda::setUP_cuda(float time)
 {  
 
   // the C syntax
@@ -196,22 +232,18 @@ void NBody_cuda::setUP_cuda()
   cudaMemcpy(d_pos, h_pos, VECTOR_SIZE_IN_BYTES, cudaMemcpyHostToDevice);
 
 
+  // Print and update
   std::cout<<"===== The starting positions===="<<std::endl;
   for(int i=0; i<_N; i++)
   {
     std::cout<<h_pos->_x<<","<<h_pos->_y<<","<<h_pos->_z<<std::endl;
-    h_pos++;
   }
 
+  printf("The number of 32 thread blocks %d \n", (int)ceil(_N/32));
 
+  std::cout << "AT time step "<<time << std::endl;
+  updatePhysics<<<(int)ceil(_N/32), 32>>>(_N, time, d_pos, d_vel, d_acc, d_mass, _N);
 
-  for (int i = 0; i < 1; ++i)
-  {
-    printf("The number of 32 thread blocks %d \n", (int)ceil(_N/32));
-
-    std::cout << "AT time step "<<(float)(100 * i) << std::endl;
-    updatePhysics<<<(int)ceil(_N/32), 32>>>(_N, (float)(i * 100), d_pos, d_vel, d_acc, d_mass, _N);
-  }
     
 
   cudaMemcpy(h_pos, d_pos, VECTOR_SIZE_IN_BYTES, cudaMemcpyDeviceToHost);
@@ -227,22 +259,164 @@ void NBody_cuda::setUP_cuda()
   {
     std::cout<<h_pos->_x<<","<<h_pos->_y<<","<<h_pos->_z<<std::endl;
     h_pos++;
+    _bodies[i]->_position = {h_pos->_x, h_pos->_y,h_pos->_z};
+    h_pos++; 
   }
-
-  
+  printf("Finsihed Modifying the positions \n");
 
 }
 
-int main() 
+
+// Class pointer
+NBody_cuda* nbody_cuda = new NBody_cuda(Nu,10.,2);
+
+
+
+// Drawing the bodies through a class pointer is impossibléééé !!
+
+void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition) {
+  // compute displacement and new vectors
+  static float previousTime = 0.0f;
+  //sleep(3); 
+  float currentTime = timeKeeper->GetElapsedSeconds();
+
+  printf("In the set up of the bodies \n");
+  
+  nbody_cuda->setUP_cuda( currentTime - previousTime );
+  
+  previousTime = currentTime;
+
+  printf("Drawing \n");
+
+  for( int i = 0; i < nbody_cuda->get_N() ; i++ ) {
+    // Save
+    sModelViewMatrixStack.PushMatrix();
+    sModelViewMatrixStack.Translate(0.0f, 0.0f, -1000.0f);
+    sModelViewMatrixStack.Rotate(1.0f, 0.0f, 1.0f, 1.0f);
+
+    // update position with regard to new values
+    sBodyFrames[i].SetOrigin( nbody_cuda->_bodies[i]->_position._x,
+                              nbody_cuda->_bodies[i]->_position._y,
+                              nbody_cuda->_bodies[i]->_position._z );
+    // draw
+    sModelViewMatrixStack.MultMatrix( sBodyFrames[i] );
+    sShaderManager.UseStockShader( GLT_SHADER_POINT_LIGHT_DIFF,
+                                    sTransformPipeline.GetModelViewMatrix(),
+                                    sTransformPipeline.GetProjectionMatrix(),
+                                    lightPosition,
+                                    sBodyColors[0] );
+    sBodyBatch[i].Draw();
+    // Restore
+    sModelViewMatrixStack.PopMatrix();
+  }
+}
+
+void onRenderScene( void ) {
+   // Clear the buffer
+   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+   static CStopWatch timeKeeper;
+   // Place camera
+   M3DMatrix44f mCamera;
+   sCameraFrame.GetCameraMatrix( mCamera );
+   sModelViewMatrixStack.PushMatrix( mCamera );
+   // Transform the light position into eye coordinates
+   M3DVector4f lightPos = { sMainLightPos[0],
+                            sMainLightPos[1],
+                            sMainLightPos[2],
+                            sMainLightPos[3]
+                          };
+   M3DVector4f lightEyePos;
+   m3dTransformVector4( lightEyePos, lightPos, mCamera );
+   // Call the drawing functions
+   drawBodies( &timeKeeper, &lightEyePos );
+   // Switch the buffers to bring the drawing on screen
+   glutSwapBuffers();
+   glutPostRedisplay();
+}
+
+
+void registerCallbacks() {
+   glutReshapeFunc( onChangeSize );
+   glutDisplayFunc( onRenderScene );
+}
+
+
+// Our function
+void setupBodies()
 {
-  NBody_cuda nbody = NBody_cuda(N,1.,2);
+    for( int i = 0; i < nbody_cuda->get_N(); i++ ) {
+            // Porting the local variable to GPU
+            sBodyRadius[i] = nbody_cuda->_bodies[i]->_radius;
+
+            gltMakeSphere( sBodyBatch[i], sBodyRadius[i], 30, 50 );
+            sBodyFrames[i].SetOrigin( 
+            nbody_cuda->_bodies[i]->_position._x,
+            nbody_cuda->_bodies[i]->_position._y,
+            nbody_cuda->_bodies[i]->_position._z 
+            );
+    }
+}
+
+
+// Render context, things that are just in the tuto
+void setupRenderContext() 
+{
+   sShaderManager.InitializeStockShaders();
+   glEnable( GL_DEPTH_TEST );
+   setupBodies();
+   glClearColor( sBackgroundColor[0],
+                 sBackgroundColor[1],
+                 sBackgroundColor[2],
+                 sBackgroundColor[3] );
+   glEnable( GL_LINE_SMOOTH );
+}
+
+
+
+// Main loop (thanks to the eric dave tutorial)
+int main( int argc, char **argv ) 
+{
+    //Do the OpenGL stuff
+
+    printf("Set up the window \n");
+    setupWindow( argc, argv );
+
+    printf("Reading callbacks (none for now) \n");
+    registerCallbacks();
+    // Initialize GLEW
+    GLenum anError = glewInit();
+
+    if( anError != 0 ) {
+        fprintf( stderr, "GLEW Error: %s\n",
+                glewGetErrorString( anError ) );
+
+        if( DEBUG == true ) {
+            cerr << " done" << endl;
+        }
+
+        return 1;
+    }
+
+
+    printf("The GL context \n");
+    setupRenderContext();
+
+    printf("The main loop \n");
+    glutMainLoop();
+    return 0;
+}
+
+
+/* int main() 
+{
+  NBody_cuda nbody = NBody_cuda(Nu,1.,2);
 
   std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
   
-  nbody.setUP_cuda();
+  
   
   std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
   //Computing the time
   std::cout << "Time taken by the CUDA kernel is " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
-}
+} */

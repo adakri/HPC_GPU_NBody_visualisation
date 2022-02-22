@@ -67,9 +67,17 @@ __device__
 void normalize(vector& v) 
 {
     Scalar length = norm2(v);
-    v._x /= length;
-    v._y /= length;
-    v._z /= length;
+    if(length==0.)
+    {
+      v._x = 0.;
+      v._y = 0.;
+      v._z = 0.;
+    }
+    else{
+      v._x /= length;
+      v._y /= length;
+      v._z /= length;
+    }
 }
 
 __device__
@@ -90,6 +98,8 @@ void v_direction(
   resultVector._y = toVector._y - fromVector._y;
   resultVector._z = toVector._z - fromVector._z;
 
+  //printf("result %f %f %f \n", resultVector._x, resultVector._y, resultVector._z);
+
   normalize(resultVector);
   invert(resultVector);
 };
@@ -99,16 +109,23 @@ Force ComputeForce(
           Mass onMass, 
           Mass becauseOfMass,
           vector onPosition, 
-          vector becauseOfPosition) 
+          vector becauseOfPosition,
+          vector& onVel ) 
 {
   Scalar delta_x = becauseOfPosition._x - onPosition._x;
   Scalar delta_y = becauseOfPosition._y - onPosition._y;
   Scalar delta_z = becauseOfPosition._z - onPosition._z;
   Scalar distance = sqrt(delta_x * delta_x + delta_y * delta_y + delta_z * delta_z);
+  // add rayon moyen
+  if(distance <= 1e2)
+  {
+    invert(onVel);
+  }
+    
 
   //printf("Inside the force comp %f \n", distance);
 
-  if( distance == 0. ) 
+  if( distance < 10e-10 ) 
   {
     return 0.;
   }
