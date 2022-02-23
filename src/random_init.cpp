@@ -14,8 +14,8 @@ Vec3 randomParticlePosition()
 
 	// Random position on a 'thick disk'
 	Vec3 pos = Vec3(
-		(((float) rand()) / (float) RAND_MAX) * 400. - 200.,
-		(((float) rand()) / (float) RAND_MAX) * 200. ,
+		(((float) rand()) / (float) RAND_MAX) * 2200. - 1400.,
+		(((float) rand()) / (float) RAND_MAX) * 1600. -1000. ,
 		(((float) rand()) / (float) RAND_MAX) * -2500. - 800 
 		); 
 
@@ -27,9 +27,9 @@ Vec3 randomParticleVelocity()
 
 	// Initial velocity is 'orbital' velocity from position
 	Vec3 vel = Vec3(
-		0.,
-		0.,
-		0.
+		(((float) rand()) / (float) RAND_MAX) * 60. - 50.,
+		(((float) rand()) / (float) RAND_MAX) * 60. - 50.,
+		(((float) rand()) / (float) RAND_MAX) * 60. - 50.
 		); 
 	return vel;
 }

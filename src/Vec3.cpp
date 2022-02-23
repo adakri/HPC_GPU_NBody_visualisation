@@ -73,9 +73,9 @@ void direction(
         const Vec3 &toVector,
         Vec3 &resultVector) 
 {
-  resultVector._x = toVector._x - fromVector._x;
-  resultVector._y = toVector._y - fromVector._y;
-  resultVector._z = toVector._z - fromVector._z;
+  resultVector._x = -(toVector._x - fromVector._x);
+  resultVector._y = -(toVector._y - fromVector._y);
+  resultVector._z = -(toVector._z - fromVector._z);
 
   debug("inside direction")
   debug(resultVector._x)

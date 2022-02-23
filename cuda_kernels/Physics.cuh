@@ -12,7 +12,7 @@
 
 
 __device__
-void d_updateAcceleration(int, vector *,vector *,Mass *, int);
+void d_updateAcceleration(int, vector *,vector *,vector *,Mass *, int);
 
 __device__
 void d_updateVelocity(int , float , vector *, vector *); 
@@ -29,34 +29,34 @@ void d_updatePhysics(int, float, vector *, vector *,vector *,Mass *, int);
 
 
 // demo (from this astrophysics github page)
-# define N 32
-static vector nBodyPosition[N] = 
+# define Nu 320
+static vector nBodyPosition[Nu] = 
 {
-  { 0.0f, 0.0f, -1000.0f },
-  { 0.0f, 200.0f, -1000.0f },
-  { -200.0f, 0.0f, -1000.0f },
-  { 0.0f, 0.0f, -800.0f },
+  { 10.0f, 0.0f, -1000.0f },
+  { 30.0f, 250.0f, -1000.0f },
+  { -280.0f, 100.0f, -1000.0f },
+  { 20.0f, 20.0f, -800.0f },
+  { -100.0f, 500.0f, -2000.0f },
+  { 170.0f, 63.0f, -500.0f },
+  { -520.0f, 18.0f, 0.0f },
+  { 170.0f, 23.0f, -100.0f },
+  { 80.0f, 54.0f, -20.0f },
+  { 700.0f, 0.0f, -100.0f },
+  { 320.0f, 0.0f, -500.0f },
+  { -500.0f, 180.0f, 22.0f },
+  { 189.0f, 30.0f, -100.0f },
+  { 830.0f, 80.0f, -20.0f },
+  { 187.0f, 20.0f, -100.0f },
+  { 42.0f, 230.0f, -1000.0f },
+  { 95.0f, 100.0f, -1000.0f },
+  { -200.0f, 20.0f, -1000.0f },
+  { 360.0f, 20.0f, -800.0f },
   { -100.0f, 0.0f, -2000.0f },
-  { 100.0f, 0.0f, -500.0f },
-  { -50.0f, 10.0f, 0.0f },
-  { 150.0f, 0.0f, -100.0f },
-  { 800.0f, 0.0f, -20.0f },
-  { 100.0f, 0.0f, -100.0f },
-  { 100.0f, 0.0f, -500.0f },
-  { -50.0f, 10.0f, 0.0f },
-  { 150.0f, 0.0f, -100.0f },
-  { 800.0f, 0.0f, -20.0f },
-  { 100.0f, 0.0f, -100.0f },
-  { 0.0f, 0.0f, -1000.0f },
-  { 0.0f, 200.0f, -1000.0f },
-  { -200.0f, 0.0f, -1000.0f },
-  { 0.0f, 0.0f, -800.0f },
-  { -100.0f, 0.0f, -2000.0f },
-  { 100.0f, 0.0f, -500.0f },
-  { -50.0f, 10.0f, 0.0f },
-  { 150.0f, 0.0f, -100.0f },
-  { 800.0f, 0.0f, -20.0f },
-  { 100.0f, 0.0f, -100.0f },
+  { 1450.0f, 30.0f, -500.0f },
+  { -508.0f, 10.0f, 0.0f },
+  { 158.0f, 65.0f, -100.0f },
+  { 820.0f, 30.0f, -20.0f },
+  { 100.0f, 450.0f, -100.0f },
   { 100.0f, 0.0f, -500.0f },
   { -50.0f, 10.0f, 0.0f },
   { 150.0f, 0.0f, -100.0f },
@@ -66,7 +66,7 @@ static vector nBodyPosition[N] =
   { 0.0f, 200.0f, -1000.0f }
 };
 
-static vector nBodyVelocity[N] = 
+static vector nBodyVelocity[Nu] = 
 {
   { 0.0f, 0.0f, 0.0f },
   { -30.0f, -30.0f, -30.0f },
@@ -102,7 +102,7 @@ static vector nBodyVelocity[N] =
   { -30.0f, -30.0f, -30.0f }
 };
 
-static vector nBodyAcceleration[N] = 
+static vector nBodyAcceleration[Nu] = 
 {
   { 0.0f, 0.0f, 0.0f },
   { 0.0f, 0.0f, 0.0f },
@@ -138,7 +138,7 @@ static vector nBodyAcceleration[N] =
   { 0.0f, 0.0f, 0.0f }
 };
 
-static Mass nBodyMass[N] = 
+static Mass nBodyMass[Nu] = 
 {
   1e16f,
   1e14f,

@@ -1,7 +1,7 @@
 #include "NBody.hpp"
 
 
-bool DEMO = true;
+bool DEMO = false;
 
 
 NBody::NBody(int N , float tf, int timeSteps): _N(N), _tf(tf), _timeSteps(timeSteps) 
@@ -71,7 +71,7 @@ NBody::NBody(int N , float tf, int timeSteps): _N(N), _tf(tf), _timeSteps(timeSt
                                  randomParticleVelocity(),
                                   randomParticleacceleration(),
                                   random_mass(),
-                                  random_mass()
+                                  random_radius()
                                   );
       }
     }
@@ -133,7 +133,8 @@ void NBody::updateAcceleration(int bodyIndex )
                                   _bodies[bodyIndex]->_mass,
                                   _bodies[i]->_mass,
                                   _bodies[bodyIndex]->_position,
-                                  _bodies[i]->_position);
+                                  _bodies[i]->_position,
+                                  _bodies[i]->_velocity);
 
     debug(scalarForceBetween)
     
