@@ -2,9 +2,6 @@
 
 
 
-Barnes::Barnes(){
-    
-}
 
 
 void Barnes::createOctree(std::vector<Body*> bodies){
@@ -14,9 +11,32 @@ void Barnes::createOctree(std::vector<Body*> bodies){
    
 }
 
-int Barnes::determine(Body* body, std::vector<Node> children){
+int Barnes::determine(Body* body, Node octree){
+    double x = body->get_position().getX();
+    double y = body->get_position().getY();
+    double z = body->get_position().getZ();
+
+    double x2 = octree.coord.getX();
+    double y2 = octree.coord.getY();
+    double z2 = octree.coord.getZ();
+
     for (int i=0; i<8; i++){
-        
+        if(x<x2 && y>y2 && z<z2)
+            return 0;
+        if(x<x2 && y>y2 && z>z2)
+            return 1;
+        if(x>x2 && y>y2 && z<z2)
+            return 2;
+        if(x>x2 && y>y2 && z>z2)
+            return 3;
+        if(x<x2 && y<y2 && z<z2)
+            return 4;
+        if(x<x2 && y<y2 && z>z2)
+            return 5;
+        if(x>x2 && y<y2 && z<z2)
+            return 6;
+        if(x>x2 && y<y2 && z>z2)
+            return 7;
     }
 }
 
@@ -66,18 +86,18 @@ std::vector<Node> Barnes::subdivise(Node octree){
 
 void Barnes::insertInOctree(Body* body, Node octree){
     if(octree.numberOfParticle > 1){
-        int choice = determine(body, octree.children);
+        int choice = determine(body, octree);
         insertInOctree(body, octree.children[choice]);
     }
     else if(octree.numberOfParticle == 1){
         //diviser l'octree
         octree.children = subdivise(octree);
 
-        int choiceExistingParticule = determine(octree.particule, octree.children);
+        int choiceExistingParticule = determine(octree.particule, octree);
         insertInOctree(octree.particule, octree.children[choiceExistingParticule]);
         octree.particule = NULL;
 
-        int choice = determine(body, octree.children);
+        int choice = determine(body, octree);
         insertInOctree(body, octree.children[choice]);
         // determiner pour la particule deja presente
         // determiner pour la nouvelle particule
@@ -89,12 +109,7 @@ void Barnes::insertInOctree(Body* body, Node octree){
     }
 }
     
-void Barnes::deleteEmptyNode(Node octree){
-    for (int i=0; i<8; i++){
 
-    }
-
-}
 
 
 
@@ -114,8 +129,12 @@ propNode Barnes::updateMass(Node octree){
         for(int i = 0; i<8; i++){
             propsNode.push_back(updateMass(octree.children[i]));
         }
-        octree.totalMass = propsNode[0]+propsNode[1]+propsNode[2]+propsNode[3]+propsNode[4]+propsNode[5]+propsNode[6]+propsNode[7];
-        octree.centerMass = octree.coord; // A CHANGER !!!!!!!
+        octree.totalMass = propsNode[0].totalMass+propsNode[1].totalMass+propsNode[2].totalMass+propsNode[3].totalMass+propsNode[4].totalMass+propsNode[5].totalMass+propsNode[6].totalMass+propsNode[7].totalMass;
+        for(int i =0; i<8; i++){
+            octree.centerMass = octree.centerMass + propsNode[i].centerMass*propsNode[i].totalMass;
+
+        }
+        octree.centerMass = octree.centerMass* (1./octree.totalMass);
         return {octree.totalMass, octree.centerMass};
     }
     
@@ -127,30 +146,38 @@ void Barnes::updateForces(std::vector<Body*> bodies){
     }
 }
 
-double Barnes::updateForce(Body* body, Node octree){
-    double force; 
+Force Barnes::updateForce(Body* body, Node octree){
+    Force force; 
     if (octree.numberOfParticle==1){
-        // compute force avec la formule
-
-        // update force pour le body
+        force = Physics::ComputeForce(body->get_mass(), octree.particule->get_mass(), body->get_position(), octree.particule->get_position());
+        body->force = force; 
         return force;
-    } else {
-        double r; // distance particule i et centre de masse du noeud;
+    } else if (octree.numberOfParticle==0){
+        return 0.;
+    }
+    else {
+        Scalar delta_x = octree.centerMass._x - body->get_position()._x;
+        Scalar delta_y = octree.centerMass._y - body->get_position()._y;
+        Scalar delta_z = octree.centerMass._z - body->get_position()._z;
+        Scalar r = sqrt(delta_x * delta_x + delta_y * delta_y + delta_z * delta_z); // distance particule i et centre de masse du noeud;
         double D = octree.width; 
         if (r/D < 2.){
-            // compute avec totalMass et centre de masse; 
-
-            // update force pour le body 
+            force = Physics::ComputeForce(body->get_mass(), octree.totalMass, body->get_position(), octree.centerMass); 
+            body->force = force; 
             return force;
         } else{
             for(int i = 0; i<8; i++){
                 force += updateForce(body, octree.children[i]);
             }
-
-            //update force pour le body
+            body->force = force; 
             return force;
-        }
-        
+    }  
     }
+
+}
+
+int main( int argc, char **argv ) {
+
+    printf("ok");
 
 }

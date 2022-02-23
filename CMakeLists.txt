@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.0.2)
 option(PARALLEL "Enable cuda parallelism" OFF)
 
 # To use 
-# cmake -DPARALLEL=ON -S ../ -B . (in build ofc)
+# cmake -DPARALLEL=OFF -S ../ -B . (in build ofc)
 
 project(Surf_Modelling)
 
@@ -18,7 +18,7 @@ include_directories(include)
 # Ajouter les fichiers NBODY_SRC
 SET( NBODY_SRC
   #.cu & .cpp
-  src/Body.cpp src/Vec3.cpp src/random_init.cpp src/NBody.cpp src/Viewer.cpp src/Physics.cpp src/main.cpp 
+  src/Body.cpp src/Vec3.cpp src/random_init.cpp src/NBody.cpp src/Viewer.cpp src/Physics.cpp src/Barnes.cpp 
   OpenGL_libs/src/GLBatch.cpp OpenGL_libs/src/glew.c OpenGL_libs/src/GLShaderManager.cpp OpenGL_libs/src/GLTools.cpp OpenGL_libs/src/GLTriangleBatch.cpp OpenGL_libs/src/math3d.cpp
 )
 
