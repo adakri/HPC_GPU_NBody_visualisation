@@ -125,7 +125,7 @@ Force ComputeForce(
 
   //printf("Inside the force comp %f \n", distance);
 
-  if( distance < 10e-10 ) 
+  if( distance < 1e-5 ) 
   {
     return 0.;
   }

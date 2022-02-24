@@ -27,9 +27,9 @@ Vec3 randomParticleVelocity()
 
 	// Initial velocity is 'orbital' velocity from position
 	Vec3 vel = Vec3(
-		(((float) rand()) / (float) RAND_MAX) * 60. - 50.,
-		(((float) rand()) / (float) RAND_MAX) * 60. - 50.,
-		(((float) rand()) / (float) RAND_MAX) * 60. - 50.
+		(((float) rand()) / (float) RAND_MAX) * 6. - 5.,
+		(((float) rand()) / (float) RAND_MAX) * 6. - 5.,
+		0.
 		); 
 	return vel;
 }

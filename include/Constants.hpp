@@ -30,6 +30,6 @@ const double kMaxMass = 100 * kSolarMassScaled;
 
 /* Random radius range for bodies */
 const double kMinRadius = 5;
-const double kMaxRadius = 25;
+const double kMaxRadius = 12;
 
 #endif 

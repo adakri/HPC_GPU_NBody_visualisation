@@ -6,7 +6,7 @@
 
 
 
-bool DEMO_CUDA = false;
+bool DEMO_CUDA = true;
 
 
 
@@ -37,7 +37,7 @@ class NBody_cuda
 
         //Physics
         void display_bodies();
-        void setUP_cuda(float);
+        void setUP_cuda(float , vector *, vector *, vector *, Mass *);
 
         //getters and setters
         int get_N() const {return _N;}
@@ -165,7 +165,7 @@ void d_updatePosition(int index, float deltaT, vector *d_vel, vector *d_pos)
 __global__
 void updatePhysics(int bodies, float deltaT, vector *d_pos, vector *d_vel, vector *d_acc, Mass *d_mass, int _N)
 {
-  
+  printf("Inside the update physics \n");
   // 1D blocks and thread organisation
   int blockidx = blockIdx.x;
   int threadidx = threadIdx.x;
@@ -190,17 +190,17 @@ void updatePhysics(int bodies, float deltaT, vector *d_pos, vector *d_vel, vecto
   d_updatePosition(element_id, deltaT, d_vel, d_pos);
 
   //printf("%s \n", "===== The positions in the updatePhys==== \n");
-  for(int i=0; i<element_id; i++)
-  {
-    d_pos++;
-  }
-  //printf("* %d %f, %f, %f \n",element_id,d_pos->_x,d_pos->_y,d_pos->_z);
+  printf("* %d %f, %f, %f \n",element_id,(d_pos+element_id)->_x,(d_pos+element_id)->_y,(d_pos+element_id)->_z);
 };
+
+
+// Determine first time acess
+bool FIRST_TIME = true;
 
 
 // The execution is very different 
 // Compute through GPU the update at time time and update the body ppoisitons
-void NBody_cuda::setUP_cuda(float time)
+void NBody_cuda::setUP_cuda(float time, vector *h_pos, vector *h_vel, vector *h_acc, Mass *h_mass)
 {  
 
   // the C syntax
@@ -208,41 +208,46 @@ void NBody_cuda::setUP_cuda(float time)
   int SCALAR_SIZE_IN_BYTES = _N * sizeof(Scalar);
 
   //Initializing Velocities of N bodies in GPU
-  vector *h_vel = nBodyVelocity;
+  //vector *h_vel = nBodyVelocity;
   vector *d_vel;
   cudaMalloc((void**) &d_vel, VECTOR_SIZE_IN_BYTES);
   cudaMemcpy(d_vel, h_vel, VECTOR_SIZE_IN_BYTES, cudaMemcpyHostToDevice);
 
   //Initializing acceleration of N bodies in GPU
-  vector *h_acc = nBodyAcceleration;
+  //vector *h_acc = nBodyAcceleration;
   vector *d_acc;
   cudaMalloc((void**) &d_acc, VECTOR_SIZE_IN_BYTES);
   cudaMemcpy(d_acc, h_acc, VECTOR_SIZE_IN_BYTES, cudaMemcpyHostToDevice);
   
   //Initializing Mass of N bodies in GPU
-  Mass *h_mass = nBodyMass;
+  //Mass *h_mass = nBodyMass;
   Mass *d_mass;
   cudaMalloc((void**) &d_mass, SCALAR_SIZE_IN_BYTES);
   cudaMemcpy(d_mass, h_mass, SCALAR_SIZE_IN_BYTES, cudaMemcpyHostToDevice);
 
-    //Initializing Positions of N bodies in GPU
-  vector *h_pos = nBodyPosition;
+  //Initializing Positions of N bodies in GPU
+  //vector *h_pos = nBodyPosition;
   vector *d_pos;
   cudaMalloc((void**) &d_pos, VECTOR_SIZE_IN_BYTES);
   cudaMemcpy(d_pos, h_pos, VECTOR_SIZE_IN_BYTES, cudaMemcpyHostToDevice);
 
 
   // Print and update
-  std::cout<<"===== The starting positions===="<<std::endl;
+   std::cout<<"===== The starting positions===="<<std::endl;
   for(int i=0; i<_N; i++)
   {
-    std::cout<<h_pos->_x<<","<<h_pos->_y<<","<<h_pos->_z<<std::endl;
+    std::cout<<(h_pos+i)->_x<<","<<(h_pos+i)->_y<<","<<(h_pos+i)->_z<<std::endl;
   }
+
+
+
+  //exit(0);
 
   printf("The number of 32 thread blocks %d \n", (int)ceil(_N/32));
 
-  std::cout << "AT time step "<<time << std::endl;
-  updatePhysics<<<(int)ceil(_N/32), 32>>>(_N, time, d_pos, d_vel, d_acc, d_mass, _N);
+  std::cout << "AT time "<<time << std::endl;
+  
+  updatePhysics<<<(int)ceil(_N/32), 32>>>(_N, time*100., d_pos, d_vel, d_acc, d_mass, _N);
 
     
 
@@ -254,22 +259,30 @@ void NBody_cuda::setUP_cuda(float time)
   cudaFree(d_acc);
   cudaFree(d_mass);
 
-  std::cout<<"===== The Final positions===="<<std::endl;
+  /* std::cout<<"===== The Final positions===="<<std::endl;
   for(int i=0; i<_N; i++)
   {
     std::cout<<h_pos->_x<<","<<h_pos->_y<<","<<h_pos->_z<<std::endl;
-    h_pos++;
     _bodies[i]->_position = {h_pos->_x, h_pos->_y,h_pos->_z};
     h_pos++; 
+  } */
+  printf("Finsihed Modifying the positions, thses ones \n");
+  for(int i=0; i<_N; i++)
+  {
+    std::cout<<(h_pos+i)->_x<<","<<(h_pos+i)->_y<<","<<(h_pos+i)->_z<<std::endl;
   }
-  printf("Finsihed Modifying the positions \n");
-
 }
 
 
 // Class pointer
 NBody_cuda* nbody_cuda = new NBody_cuda(Nu,10.,2);
 
+
+//Initializing Qs of N bodies in GPU
+vector *h_vel = nBodyVelocity;
+vector *h_acc = nBodyAcceleration;
+Mass *h_mass = nBodyMass;
+vector *h_pos = nBodyPosition;
 
 
 // Drawing the bodies through a class pointer is impossibléééé !!
@@ -282,7 +295,16 @@ void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition) {
 
   printf("In the set up of the bodies \n");
   
-  nbody_cuda->setUP_cuda( currentTime - previousTime );
+
+  std::cout<<"===== The Present positions===="<<std::endl;
+  for(int i=0; i<Nu; i++)
+  {
+    std::cout<<(h_pos+i)->_x<<","<<(h_pos+i)->_y<<","<<(h_pos+i)->_z<<std::endl;
+  }
+
+  std::cout<<"The time "<<currentTime<<std::endl;
+
+  nbody_cuda->setUP_cuda( currentTime, h_pos, h_vel, h_acc,h_mass );
   
   previousTime = currentTime;
 
