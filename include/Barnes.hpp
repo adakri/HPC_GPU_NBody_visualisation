@@ -1,4 +1,3 @@
-#include "Physics.hpp"
 #include "NBody.hpp"
 
 #include <iostream>
@@ -10,13 +9,17 @@
 
 struct Node {
     std::vector<Node> children;
-    float totalMass;
+    double totalMass;
     Vec3 centerMass;
     int numberOfParticle;
     Vec3 coord;
     int width;
-    int particule = NULL; 
+    Body* particule = NULL; 
+};
 
+struct propNode {
+    double totalMass; 
+    Vec3 centerMass; 
 };
 
 class Barnes {
@@ -26,12 +29,11 @@ class Barnes {
     public:
         void createOctree(std::vector<Body*> bodies);
         void insertInOctree(Body* body, struct Node octree);
-        int determine(Body* body, std::vector<Node>);
+        int determine(Body* body, Node octree);
         std::vector<Node> subdivise(Node octree);
-        void deleteEmptyNode(struct Node octree);
-        void updateMass();
+        propNode updateMass(Node octree);
         void updateForces(std::vector<Body*> bodies);
-        void updateForce(Body* body, struct Node octree);
+        Force updateForce(Body* body, struct Node octree);
 
 
 };

@@ -18,6 +18,7 @@ class Body {
     Vec3 _position;
     Vec3 _velocity;
     Vec3 _acceleration;
+    Force force; 
     double _mass;
     double _radius;
 
