@@ -65,7 +65,13 @@ NBody::NBody(int N , float tf, int timeSteps): _N(N), _tf(tf), _timeSteps(timeSt
           _bodies[i] = new Body(BodyPosition[i], BodyVelocity[i], BodyAcceleration[i], BodyMass[i], BodyRadius[i]);
       }
     }else{
-      for(int i=0; i<_N; i++)
+      _bodies[0] = new Body(Vec3(0.,0.,0.),
+                                 Vec3(0.,0.,0.),
+                                  randomParticleacceleration(),
+                                  10e16,
+                                  35
+                                  );
+      for(int i=1; i<_N; i++)
       {
           _bodies[i] = new Body(randomParticlePosition(),
                                  randomParticleVelocity(),

@@ -38,7 +38,7 @@ bool CUDA = false;
 
 const int APP_WIDTH = 1080;
 const int APP_HEIGHT = 720;
-const int NBODY_COUNT = 10;
+const int NBODY_COUNT = 500;
 const char* APP_NAME = "==NBODY SIMULATION Sequential==";
 
 
