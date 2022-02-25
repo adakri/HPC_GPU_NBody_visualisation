@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <chrono>
+#include<unistd.h>
 
 
 
@@ -53,9 +54,9 @@ class NBody_cuda
 NBody_cuda::NBody_cuda(int N_b , float tf, int timeSteps): _N(N_b), _tf(tf), _timeSteps(timeSteps) 
 {
   _bodies.resize(_N);
-  if(DEMO_CUDA)
+  if(!DEMO_CUDA)
   {
-    for(int i=0; i<_N; i++)
+    for(int i=1; i<_N; i++)
     {
       _bodies[i] = new Body(
         Vec3(nBodyPosition[i]._x,nBodyPosition[i]._y,nBodyPosition[i]._z),randomParticleVelocity(),
@@ -64,14 +65,21 @@ NBody_cuda::NBody_cuda(int N_b , float tf, int timeSteps): _N(N_b), _tf(tf), _ti
                                     );
     }
   }else{
-    for(int i=0; i<_N; i++)
+    printf("Initializing begun \n");
+    _bodies[0] = new Body(Vec3(0.,0.,0.),
+                                 Vec3(0.,0.,0.),
+                                  randomParticleacceleration(),
+                                  10e16,
+                                  35
+                                  );
+    for(int i=1; i<_N; i++)
     {
       _bodies[i] = new Body(randomParticlePosition(),
-                                  randomParticleVelocity(),
-                                    randomParticleacceleration(),
-                                    random_mass(),
-                                    random_radius()
-                                    );
+                            randomParticleVelocity(),
+                              randomParticleacceleration(),
+                              random_mass(),
+                              random_radius()
+                              );
     }
   }
   
@@ -172,16 +180,16 @@ void updatePhysics(int bodies, float deltaT, vector *d_pos, vector *d_vel, vecto
 
   int element_id = (blockidx * threadidx) + threadidx;
 
-  printf("the element id %d \n", element_id);
+  //printf("the element id %d \n", element_id);
 
   if(element_id > _N)
     return;
 
   //printf("%s \n", "===== The positions in the updatePhys b4==== \n");
-  for(int i=1; i<element_id; i++)
+  /* for(int i=1; i<element_id; i++)
   {
     d_pos++;
-  }
+  } */
   //printf("@ %d %f, %f, %f \n",element_id,d_pos->_x,d_pos->_y,d_pos->_z);
 
 
@@ -190,7 +198,8 @@ void updatePhysics(int bodies, float deltaT, vector *d_pos, vector *d_vel, vecto
   d_updatePosition(element_id, deltaT, d_vel, d_pos);
 
   //printf("%s \n", "===== The positions in the updatePhys==== \n");
-  printf("* %d %f, %f, %f \n",element_id,(d_pos+element_id)->_x,(d_pos+element_id)->_y,(d_pos+element_id)->_z);
+  /* printf("* %d %f, %f, %f \n",element_id,(d_pos+element_id)->_x,(d_pos+element_id)->_y,(d_pos+element_id)->_z); */
+
 };
 
 
@@ -233,11 +242,11 @@ void NBody_cuda::setUP_cuda(float time, vector *h_pos, vector *h_vel, vector *h_
 
 
   // Print and update
-   std::cout<<"===== The starting positions===="<<std::endl;
+  /*  std::cout<<"===== The starting positions===="<<std::endl;
   for(int i=0; i<_N; i++)
   {
     std::cout<<(h_pos+i)->_x<<","<<(h_pos+i)->_y<<","<<(h_pos+i)->_z<<std::endl;
-  }
+  } */
 
 
 
@@ -266,10 +275,12 @@ void NBody_cuda::setUP_cuda(float time, vector *h_pos, vector *h_vel, vector *h_
     _bodies[i]->_position = {h_pos->_x, h_pos->_y,h_pos->_z};
     h_pos++; 
   } */
-  printf("Finsihed Modifying the positions, thses ones \n");
+  
+  //printf("Finsihed Modifying the positions, thses ones \n");
   for(int i=0; i<_N; i++)
   {
-    std::cout<<(h_pos+i)->_x<<","<<(h_pos+i)->_y<<","<<(h_pos+i)->_z<<std::endl;
+    //std::cout<<(h_pos+i)->_x<<","<<(h_pos+i)->_y<<","<<(h_pos+i)->_z<<std::endl;
+    _bodies[i]->_position = {(h_pos+i)->_x, (h_pos+i)->_y,(h_pos+i)->_z};
   }
 }
 
@@ -296,11 +307,11 @@ void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition) {
   printf("In the set up of the bodies \n");
   
 
-  std::cout<<"===== The Present positions===="<<std::endl;
+  /* std::cout<<"===== The Present positions===="<<std::endl;
   for(int i=0; i<Nu; i++)
   {
     std::cout<<(h_pos+i)->_x<<","<<(h_pos+i)->_y<<","<<(h_pos+i)->_z<<std::endl;
-  }
+  } */
 
   std::cout<<"The time "<<currentTime<<std::endl;
 
@@ -308,7 +319,7 @@ void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition) {
   
   previousTime = currentTime;
 
-  printf("Drawing \n");
+  std::cout<<"#### In the GL Draw ####"<<std::endl;
 
   for( int i = 0; i < nbody_cuda->get_N() ; i++ ) {
     // Save
@@ -320,6 +331,10 @@ void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition) {
     sBodyFrames[i].SetOrigin( nbody_cuda->_bodies[i]->_position._x,
                               nbody_cuda->_bodies[i]->_position._y,
                               nbody_cuda->_bodies[i]->_position._z );
+
+    std::cout<<nbody_cuda->_bodies[i]->_position._x<<","<<
+            nbody_cuda->_bodies[i]->_position._y<<","<<
+            nbody_cuda->_bodies[i]->_position._z<<std::endl; 
     // draw
     sModelViewMatrixStack.MultMatrix( sBodyFrames[i] );
     sShaderManager.UseStockShader( GLT_SHADER_POINT_LIGHT_DIFF,
@@ -332,6 +347,24 @@ void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition) {
     sModelViewMatrixStack.PopMatrix();
   }
 }
+
+static bool paused = false;
+
+void handleKeypress(unsigned char key, int x, int y) 
+{  
+  switch (key) 
+  {
+          case 27:                
+            exit(0);              
+          case 'p':
+            paused = !paused;
+            sleep(100);
+            printf("Paused for 100s \n");
+            
+  }
+}
+
+
 
 void onRenderScene( void ) {
    // Clear the buffer
@@ -360,12 +393,14 @@ void onRenderScene( void ) {
 void registerCallbacks() {
    glutReshapeFunc( onChangeSize );
    glutDisplayFunc( onRenderScene );
+   glutKeyboardFunc(handleKeypress);
 }
 
 
 // Our function
 void setupBodies()
 {
+    std::cout<<"#### In the GL ####"<<std::endl;
     for( int i = 0; i < nbody_cuda->get_N(); i++ ) {
             // Porting the local variable to GPU
             sBodyRadius[i] = nbody_cuda->_bodies[i]->_radius;
@@ -376,7 +411,11 @@ void setupBodies()
             nbody_cuda->_bodies[i]->_position._y,
             nbody_cuda->_bodies[i]->_position._z 
             );
+            std::cout<<nbody_cuda->_bodies[i]->_position._x<<","<<
+            nbody_cuda->_bodies[i]->_position._y<<","<<
+            nbody_cuda->_bodies[i]->_position._z<<std::endl; 
     }
+    std::cout<<std::endl;
 }
 
 
@@ -404,7 +443,10 @@ int main( int argc, char **argv )
     setupWindow( argc, argv );
 
     printf("Reading callbacks (none for now) \n");
-    registerCallbacks();
+    if(!paused)
+    {
+      registerCallbacks();
+    }
     // Initialize GLEW
     GLenum anError = glewInit();
 
