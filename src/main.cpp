@@ -34,11 +34,11 @@ using std::endl;
 
 #define debug std::cout<<"debug"<<std::endl;
 
-bool CUDA = false;
+bool BARNES = false;
 
 const int APP_WIDTH = 1080;
 const int APP_HEIGHT = 720;
-const int NBODY_COUNT = 500;
+const int NBODY_COUNT = 10;
 const char* APP_NAME = "==NBODY SIMULATION Sequential==";
 
 
@@ -117,12 +117,15 @@ void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition ) {
    static float previousTime = 0.0f;
    //sleep(3); 
    float currentTime = timeKeeper->GetElapsedSeconds();
-   if(CUDA)
+   if(BARNES)
    {
+      simul->updatePhysics2(currentTime - previousTime);
       //copy all to cuda class
       
    }else{
-      simul->updatePhysics( currentTime - previousTime );
+      simul->updatePhysics(currentTime - previousTime);
+      //simul->updatePhysics2( currentTime - previousTime );
+      
    }
    
    previousTime = currentTime;

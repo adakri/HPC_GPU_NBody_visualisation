@@ -146,14 +146,18 @@ void Barnes::updateForces(std::vector<Body*> bodies){
     }
 }
 
-Force Barnes::updateForce(Body* body, Node octree){
-    Force force; 
+Vec3 Barnes::updateForce(Body* body, Node octree){
+    Vec3 force; 
     if (octree.numberOfParticle==1){
-        force = Physics::ComputeForce(body->get_mass(), octree.particule->get_mass(), body->get_position(), octree.particule->get_position());
+        Force scalarForce;
+        scalarForce = Physics::ComputeForce(body->get_mass(), octree.particule->get_mass(), body->get_position(), octree.particule->get_position(), body->_velocity);
+        
+        direction(body->get_position(),octree.particule->get_position(), force);
+        force = force*scalarForce;
         body->force = force; 
         return force;
     } else if (octree.numberOfParticle==0){
-        return 0.;
+        return Vec3(0,0,0);
     }
     else {
         Scalar delta_x = octree.centerMass._x - body->get_position()._x;
@@ -162,12 +166,15 @@ Force Barnes::updateForce(Body* body, Node octree){
         Scalar r = sqrt(delta_x * delta_x + delta_y * delta_y + delta_z * delta_z); // distance particule i et centre de masse du noeud;
         double D = octree.width; 
         if (r/D < 2.){
-            force = Physics::ComputeForce(body->get_mass(), octree.totalMass, body->get_position(), octree.centerMass); 
+            Force scalarForce;
+
+            scalarForce = Physics::ComputeForce(body->get_mass(), octree.totalMass, body->get_position(), octree.centerMass, body->_velocity); 
+            force = force*scalarForce;
             body->force = force; 
             return force;
         } else{
             for(int i = 0; i<8; i++){
-                force += updateForce(body, octree.children[i]);
+                force = force + updateForce(body, octree.children[i]);
             }
             body->force = force; 
             return force;
@@ -176,8 +183,3 @@ Force Barnes::updateForce(Body* body, Node octree){
 
 }
 
-int main( int argc, char **argv ) {
-
-    printf("ok");
-
-}
