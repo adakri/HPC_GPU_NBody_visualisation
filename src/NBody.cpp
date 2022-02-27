@@ -121,6 +121,11 @@ void NBody::compute()
 
 // Physics
 
+void NBody:: updateAcceleration2(int bodyIndex){
+    _bodies[bodyIndex]->_acceleration = Physics::computeAcceleration3D(_bodies[bodyIndex]->_mass, _bodies[bodyIndex]->force);
+
+}
+
 void NBody::updateAcceleration(int bodyIndex ) 
 {
    
@@ -204,6 +209,15 @@ void NBody::updatePhysics(float deltaT)
     updateVelocity(i, deltaT );
     updatePosition(i, deltaT );
   }
+}
+
+void NBody::updatePhysics2(float deltaT){
+  for( int i = 0; i < _N; i++ ) 
+    {
+      updateAcceleration2(i);
+      updateVelocity(i, deltaT );
+      updatePosition(i, deltaT );
+    }
 }
 
 

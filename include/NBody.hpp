@@ -25,9 +25,11 @@ class NBody
         void display_bodies();
         void compute();
         void updateAcceleration(int);
+        void updateAcceleration2(int);
         void updateVelocity(int, float);
         void updatePosition(int, float);
         void updatePhysics(float);
+        void updatePhysics2(float);
 
         //drawing with SFML (or SDL)
 
