@@ -29,7 +29,7 @@ const double kMinMass = 0.025 * kSolarMassScaled;
 const double kMaxMass = 100 * kSolarMassScaled;
 
 /* Random radius range for bodies */
-const double kMinRadius = 5;
-const double kMaxRadius = 12;
+const double kMinRadius = 15;
+const double kMaxRadius = 22;
 
 #endif 
