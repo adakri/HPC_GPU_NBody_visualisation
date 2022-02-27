@@ -19,12 +19,12 @@ NBody::NBody(int N , float tf, int timeSteps): _N(N), _tf(tf), _timeSteps(timeSt
     if(DEMO)
     {
       const float BodyRadius[_N] = {
-        50.0f,
-        10.0f,
-        15.0f,
-        5.0f,
+        100.0f,
         20.0f,
-        13.0f,
+        25.0f,
+        15.0f,
+        30.0f,
+        23.0f,
       };
 
       Position3D BodyPosition[_N] = {

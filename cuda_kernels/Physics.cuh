@@ -29,7 +29,7 @@ void d_updatePhysics(int, float, vector *, vector *,vector *,Mass *, int);
 
 
 // demo (from this astrophysics github page)
-# define Nu 32
+# define Nu 324
 static vector nBodyPosition[Nu] = 
 {
   { 10.0f, 0.0f, -1000.0f },

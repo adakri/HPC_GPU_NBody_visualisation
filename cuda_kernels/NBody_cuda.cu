@@ -4,10 +4,11 @@
 #include <vector>
 #include <chrono>
 #include<unistd.h>
+#include <fstream>
 
 
 
-bool DEMO_CUDA = true;
+bool DEMO_CUDA = false;
 
 
 
@@ -54,7 +55,8 @@ class NBody_cuda
 NBody_cuda::NBody_cuda(int N_b , float tf, int timeSteps): _N(N_b), _tf(tf), _timeSteps(timeSteps) 
 {
   _bodies.resize(_N);
-  if(!DEMO_CUDA)
+
+  if(DEMO_CUDA)
   {
     for(int i=1; i<_N; i++)
     {
@@ -63,15 +65,16 @@ NBody_cuda::NBody_cuda(int N_b , float tf, int timeSteps): _N(N_b), _tf(tf), _ti
         Vec3(nBodyVelocity[i]._x, nBodyVelocity[i]._y, nBodyVelocity[i]._z),
         nBodyMass[i], random_radius()
                                     );
+        _bodies[i]->isString();
     }
   }else{
-    printf("Initializing begun \n");
+    printf("Initializing begun \n \n \n");
     _bodies[0] = new Body(Vec3(0.,0.,0.),
                                  Vec3(0.,0.,0.),
                                   randomParticleacceleration(),
-                                  10e16,
-                                  35
-                                  );
+                                  10e20,
+                                  30
+                                  );                   
     for(int i=1; i<_N; i++)
     {
       _bodies[i] = new Body(randomParticlePosition(),
@@ -178,7 +181,7 @@ void updatePhysics(int bodies, float deltaT, vector *d_pos, vector *d_vel, vecto
   int blockidx = blockIdx.x;
   int threadidx = threadIdx.x;
 
-  int element_id = (blockidx * threadidx) + threadidx;
+  int element_id = (blockidx * blockDim.x) + threadidx;
 
   //printf("the element id %d \n", element_id);
 
@@ -190,7 +193,7 @@ void updatePhysics(int bodies, float deltaT, vector *d_pos, vector *d_vel, vecto
   {
     d_pos++;
   } */
-  //printf("@ %d %f, %f, %f \n",element_id,d_pos->_x,d_pos->_y,d_pos->_z);
+  printf("@@@@@@ %d %f, %f, %f \n",element_id,(d_pos+element_id)->_x,(d_pos+element_id)->_y,(d_pos+element_id)->_z);
 
 
   d_updateAcceleration(element_id, d_pos, d_vel, d_acc, d_mass, _N);
@@ -205,6 +208,8 @@ void updatePhysics(int bodies, float deltaT, vector *d_pos, vector *d_vel, vecto
 
 // Determine first time acess
 bool FIRST_TIME = true;
+
+int BLOC_SIZE = 64;
 
 
 // The execution is very different 
@@ -255,8 +260,30 @@ void NBody_cuda::setUP_cuda(float time, vector *h_pos, vector *h_vel, vector *h_
   printf("The number of 32 thread blocks %d \n", (int)ceil(_N/32));
 
   std::cout << "AT time "<<time << std::endl;
+
   
-  updatePhysics<<<(int)ceil(_N/32), 32>>>(_N, time*100., d_pos, d_vel, d_acc, d_mass, _N);
+  //catching the time
+  std::ofstream log;
+  log.open ("../log.txt",std::ios_base::app);
+
+  if(FIRST_TIME)
+    log << "CUDA N: "<<_N<<" "<<BLOC_SIZE<<" ";
+
+
+  using namespace std::chrono;
+
+  high_resolution_clock::time_point t1 = high_resolution_clock::now();
+
+  updatePhysics<<<(int)ceil(_N/BLOC_SIZE), BLOC_SIZE>>>(_N, time*100., d_pos, d_vel, d_acc, d_mass, _N);
+
+  high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+  duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+
+  if(FIRST_TIME)
+    log <<time_span.count()<<"\n";
+    FIRST_TIME = false;
+  log.close();
 
     
 
@@ -288,12 +315,18 @@ void NBody_cuda::setUP_cuda(float time, vector *h_pos, vector *h_vel, vector *h_
 // Class pointer
 NBody_cuda* nbody_cuda = new NBody_cuda(Nu,10.,2);
 
+//initializing
+
+vector nBodyVelocity_[Nu];
+vector nBodyAcceleration_[Nu];
+Mass nBodyMass_[Nu];
+vector nBodyPosition_[Nu];
 
 //Initializing Qs of N bodies in GPU
-vector *h_vel = nBodyVelocity;
-vector *h_acc = nBodyAcceleration;
-Mass *h_mass = nBodyMass;
-vector *h_pos = nBodyPosition;
+vector *h_vel = nBodyVelocity_;
+vector *h_acc = nBodyAcceleration_;
+Mass *h_mass = nBodyMass_;
+vector *h_pos = nBodyPosition_;
 
 
 // Drawing the bodies through a class pointer is impossibléééé !!
@@ -315,7 +348,7 @@ void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition) {
 
   std::cout<<"The time "<<currentTime<<std::endl;
 
-  nbody_cuda->setUP_cuda( currentTime, h_pos, h_vel, h_acc,h_mass );
+  nbody_cuda->setUP_cuda( currentTime - previousTime, h_pos, h_vel, h_acc,h_mass );
   
   previousTime = currentTime;
 
@@ -364,7 +397,7 @@ void handleKeypress(unsigned char key, int x, int y)
   }
 }
 
-
+bool first_time = true;
 
 void onRenderScene( void ) {
    // Clear the buffer
@@ -382,8 +415,28 @@ void onRenderScene( void ) {
                           };
    M3DVector4f lightEyePos;
    m3dTransformVector4( lightEyePos, lightPos, mCamera );
+   
+   std::ofstream log;
+   log.open ("../log.txt",std::ios_base::app);
+
+  using namespace std::chrono;
+
+  high_resolution_clock::time_point t1 = high_resolution_clock::now();
+
    // Call the drawing functions
    drawBodies( &timeKeeper, &lightEyePos );
+  
+  high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+  duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+  if(first_time)
+    log<< "\n CUDA: all :"<< Nu << " "<<BLOC_SIZE<<" "<<time_span.count()<<"\n";
+    first_time = false;
+  log.close();
+
+
+  
+  
    // Switch the buffers to bring the drawing on screen
    glutSwapBuffers();
    glutPostRedisplay();
@@ -401,19 +454,32 @@ void registerCallbacks() {
 void setupBodies()
 {
     std::cout<<"#### In the GL ####"<<std::endl;
+    printf("%d \n",nbody_cuda->get_N());
     for( int i = 0; i < nbody_cuda->get_N(); i++ ) {
-            // Porting the local variable to GPU
-            sBodyRadius[i] = nbody_cuda->_bodies[i]->_radius;
+      // initializing local variables
+      printf("%d \n", i);
+      nbody_cuda->_bodies[i]->isString();
+      nBodyVelocity_[i] = Vec3(nbody_cuda->_bodies[i]->_velocity._x,nbody_cuda->_bodies[i]->_velocity._y,nbody_cuda->_bodies[i]->_velocity._z);
 
-            gltMakeSphere( sBodyBatch[i], sBodyRadius[i], 30, 50 );
-            sBodyFrames[i].SetOrigin( 
-            nbody_cuda->_bodies[i]->_position._x,
-            nbody_cuda->_bodies[i]->_position._y,
-            nbody_cuda->_bodies[i]->_position._z 
-            );
-            std::cout<<nbody_cuda->_bodies[i]->_position._x<<","<<
-            nbody_cuda->_bodies[i]->_position._y<<","<<
-            nbody_cuda->_bodies[i]->_position._z<<std::endl; 
+      nBodyAcceleration_[i] = Vec3(nbody_cuda->_bodies[i]->_acceleration._x,nbody_cuda->_bodies[i]->_acceleration._y,nbody_cuda->_bodies[i]->_acceleration._z);
+
+      nBodyMass_[i] = nbody_cuda->_bodies[i]->_mass;
+
+      nBodyPosition_[i] = Vec3(nbody_cuda->_bodies[i]->_position._x,nbody_cuda->_bodies[i]->_position._y,nbody_cuda->_bodies[i]->_position._z); 
+
+
+      // Porting the local variable to GPU
+      sBodyRadius[i] = nbody_cuda->_bodies[i]->_radius;
+
+      gltMakeSphere( sBodyBatch[i], sBodyRadius[i], 30, 50 );
+      sBodyFrames[i].SetOrigin( 
+      nbody_cuda->_bodies[i]->_position._x,
+      nbody_cuda->_bodies[i]->_position._y,
+      nbody_cuda->_bodies[i]->_position._z 
+      );
+      std::cout<<nbody_cuda->_bodies[i]->_position._x<<","<<
+      nbody_cuda->_bodies[i]->_position._y<<","<<
+      nbody_cuda->_bodies[i]->_position._z<<std::endl; 
     }
     std::cout<<std::endl;
 }

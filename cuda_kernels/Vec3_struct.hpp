@@ -37,6 +37,14 @@ typedef struct vector
       return *this;
   }
 
+  vector& operator =(const Vec3& v)
+  {
+      _x = v._x;
+      _y = v._y;
+      _z = v._z;
+      return *this;
+  }
+
   bool operator ==(const vector &v) const
   {
       return (this->_x == v._x) && (this->_y == v._y) && (this->_z == v._z) ;
@@ -117,7 +125,7 @@ Force ComputeForce(
   Scalar delta_z = becauseOfPosition._z - onPosition._z;
   Scalar distance = sqrt(delta_x * delta_x + delta_y * delta_y + delta_z * delta_z);
   // add rayon moyen
-  if(distance <= 1e2)
+  if(distance <= 1e4)
   {
     invert(onVel);
   }

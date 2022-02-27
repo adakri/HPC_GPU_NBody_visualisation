@@ -83,7 +83,6 @@ void direction(
   debug(resultVector._z)
 
   resultVector.normalize();
-  resultVector.invert();
 }
 
 

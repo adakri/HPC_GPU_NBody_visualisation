@@ -36,9 +36,11 @@ using std::endl;
 
 bool CUDA = false;
 
+
+
 const int APP_WIDTH = 1080;
 const int APP_HEIGHT = 720;
-const int NBODY_COUNT = 500;
+const int NBODY_COUNT = 120;
 const char* APP_NAME = "==NBODY SIMULATION Sequential==";
 
 
@@ -111,12 +113,24 @@ const static GLclampf sBodyColors[1][4] = {
 
 NBody* simul = new NBody(NBODY_COUNT, 10., 2);
 
+bool FIRST_TIME = true;
 
 void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition ) {
    // compute displacement and new vectors
    static float previousTime = 0.0f;
    //sleep(3); 
    float currentTime = timeKeeper->GetElapsedSeconds();
+
+   //catching the time
+   std::ofstream log;
+   log.open ("../log.txt",std::ios_base::app);
+   if(FIRST_TIME)
+      log << "SERIAL N: "<<simul->get_N()<<" ";
+
+   using namespace std::chrono;
+
+   high_resolution_clock::time_point t1 = high_resolution_clock::now();
+
    if(CUDA)
    {
       //copy all to cuda class
@@ -124,7 +138,16 @@ void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition ) {
    }else{
       simul->updatePhysics( currentTime - previousTime );
    }
-   
+
+   high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+   duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+
+   if(FIRST_TIME)
+      log <<time_span.count()<<"\n";
+      FIRST_TIME = false;
+   log.close();
+      
    previousTime = currentTime;
 
    for( int i = 0; i < NBODY_COUNT; i++ ) {
@@ -153,6 +176,26 @@ void drawBodies( CStopWatch *timeKeeper, M3DVector4f *lightPosition ) {
    simul->display_bodies();
 }
 
+
+
+static bool paused = false;
+
+void handleKeypress(unsigned char key, int x, int y) 
+{  
+  switch (key) 
+  {
+          case 27:                
+            exit(0);              
+          case 'p':
+            paused = !paused;
+            sleep(100);
+            printf("Paused for 100s \n");
+            
+  }
+}
+
+
+
 void onRenderScene( void ) {
    // Clear the buffer
    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -180,6 +223,7 @@ void onRenderScene( void ) {
 void registerCallbacks() {
    glutReshapeFunc( onChangeSize );
    glutDisplayFunc( onRenderScene );
+   glutKeyboardFunc(handleKeypress);
 }
 
 // Our function
