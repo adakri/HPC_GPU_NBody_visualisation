@@ -10,7 +10,7 @@ This project is entirely coded in C/C++/CUDA and contains to different builds th
 
 * [CUDA](https://developer.nvidia.com/cuda-downloads) : Needed for the GPU parallel computing part, not needed if one only wants to test the sequential code.
 
-*[OpenGL & Freeglut](http://freeglut.sourceforge.net/) : For the graphics part, needed to render the simulation.
+* [OpenGL & Freeglut](http://freeglut.sourceforge.net/) : For the graphics part, needed to render the simulation.
 
 * [Cmake](https://cmake.org/) : For the packaging, build and compilation .
 
@@ -42,6 +42,6 @@ cmake -DPARALLEL=ON -S ../ -B .
 
 We obtain some results through our simulations, a more in depth discussion was led through our  [project report](https://www.overleaf.com/read/gbstyqmzwfkb) We otherwise this demo dor the actual physical simulation (one we used to check the validity od our simulations):
 
-<img src="Results/demo_100_barnes.gif" width="840" height="640" />_barnes
+<img src="Results/demo_barnes_100.gif" width="840" height="640" />
 
 
