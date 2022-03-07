@@ -4,7 +4,16 @@
 
 #include <iostream>
 
+/**
+ * @brief All the constants used to approach the physical reality of an N-Body simulation.
+ * 
+ */
 
+
+/**
+ * @brief Macro for debugging, displays variable name and value for natively typed variables.
+ * 
+ */
 #define debug(a) std::cout<<"*** DEBUG ***: "<<#a<<" "<<a<<std::endl;
 
 /* Universal Gravitational Constant */
@@ -19,16 +28,16 @@ const double kSolarMassScaled = kMassScale * kSolarMass;
 const double kTimeScale = 1E-10;
 const double kSecondsInYear = 3.154E7;
 
-/* Random velocity range for bodies */
+/* Velocity range for bodies */
 const int kMetersInKiloMeters = 1000;
 const double kMinVelocity = -0.5 * kMetersInKiloMeters;
 const double kMaxVelocity = 0.5 * kMetersInKiloMeters;
 
-/* Random mass range for bodies */
+/* Mass range for bodies */
 const double kMinMass = 0.025 * kSolarMassScaled;
 const double kMaxMass = 100 * kSolarMassScaled;
 
-/* Random radius range for bodies */
+/* Radius range for bodies */
 const double kMinRadius = 15;
 const double kMaxRadius = 22;
 

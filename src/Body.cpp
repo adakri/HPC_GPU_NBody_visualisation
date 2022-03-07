@@ -1,9 +1,5 @@
 #include "Body.hpp"
 
-void Body::Draw() const {
-
-}
-
 void Body::isString()
 {
   printf("Body with: \n");
@@ -13,7 +9,8 @@ void Body::isString()
   printf("Acceleration ( %8.4f , %8.4f, %8.4f ) \n", this->_acceleration._x, this->_acceleration._y, this->_acceleration._y);
 }
 
-void Body::UpdatePosition(double time_step) {
+void Body::UpdatePosition(double time_step)
+{
   _position._x += (_velocity._x * time_step);
   _position._y += (_velocity._y * time_step);
   _position._z += (_velocity._z * time_step);
