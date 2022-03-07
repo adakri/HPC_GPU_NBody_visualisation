@@ -40,7 +40,7 @@ cmake -DPARALLEL=ON -S ../ -B .
 
 ## Presentation of the software and the results
 
-We obtain some results through our simulations, a more in depth discussion was led through our  [project report](https://www.overleaf.com/read/gbstyqmzwfkb) We otherwise this demo dor the actual physical simulation (one we used to check the validity od our simulations):
+We obtain some results through our simulations, a more in depth discussion was led through our  [project report](https://www.overleaf.com/read/gbstyqmzwfkb). We otherwise this show this demo for the actual physical simulation (one we used to check the validity od our simulations):
 
 <img src="Results/demo_barnes_100.gif" width="840" height="640" />
 
